@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scenari Pratici EIPASS - Casi Reali</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            min-height: 100vh; 
+            padding: 20px; 
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .header { 
+            text-align: center; 
+            color: white; 
+            padding: 40px 20px; 
+            animation: fadeIn 1s ease-in;
+        }
+        .header h1 { 
+            font-size: 42px; 
+            margin-bottom: 15px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+        }
+        .header p { 
+            font-size: 20px; 
+            opacity: 0.95; 
+        }
+        
+        .intro-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 30px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .intro-card h2 {
+            color: #4338ca;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .intro-card p {
+            color: #64748b;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .intro-card ul {
+            color: #64748b;
+            margin-left: 25px;
+            line-height: 2;
+        }
+        
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .scenario-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scenario-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+        
+        .scenario-card.office { border-top: 5px solid #3b82f6; }
+        .scenario-card.remote { border-top: 5px solid #10b981; }
+        .scenario-card.security { border-top: 5px solid #ef4444; }
+        .scenario-card.presentation { border-top: 5px solid #f59e0b; }
+        .scenario-card.data { border-top: 5px solid #8b5cf6; }
+        .scenario-card.collaboration { border-top: 5px solid #ec4899; }
+        
+        .difficulty-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .difficulty-badge.facile { background: #d1fae5; color: #065f46; }
+        .difficulty-badge.medio { background: #fef3c7; color: #92400e; }
+        .difficulty-badge.difficile { background: #fee2e2; color: #991b1b; }
+        
+        .scenario-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .scenario-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1e293b;
+        }
+        
+        .scenario-description {
+            color: #64748b;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .time-badge {
+            display: inline-flex;
+            align-items: center;
+            background: #f1f5f9;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #475569;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .skill-tag {
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .start-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* MODAL SCENARIO */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            max-width: 900px;
+            margin: 40px auto;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            animation: slideDown 0.4s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 32px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: #1e293b;
+        }
+        
+        .scenario-header {
+            margin-bottom: 30px;
+        }
+        
+        .scenario-situation {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #6366f1;
+            margin-bottom: 30px;
+        }
+        
+        .scenario-situation h3 {
+            color: #1e293b;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-situation p {
+            color: #475569;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        
+        .tasks-section {
+            margin-bottom: 30px;
+        }
+        
+        .tasks-section h3 {
+            color: #1e293b;
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .task-item {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .task-item:hover {
+            border-color: #6366f1;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+        }
+        
+        .task-number {
+            display: inline-block;
+            background: #6366f1;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+        
+        .task-description {
+            display: inline;
+            color: #334155;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .task-points {
+            float: right;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        .checklist {
+            background: #f0fdf4;
+            border: 2px solid #86efac;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .checklist h4 {
+            color: #166534;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            color: #166534;
+            font-size: 15px;
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #16a34a;
+        }
+        
+        .solution-toggle {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .solution-toggle:hover {
+            background: #fde68a;
+        }
+        
+        .solution-toggle h4 {
+            color: #92400e;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .solution-content {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #fbbf24;
+            color: #78350f;
+            line-height: 1.8;
+        }
+        
+        .solution-step {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .complete-btn {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            transition: all 0.3s;
+        }
+        
+        .complete-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 30px 20px;
+            margin-top: 40px;
+            opacity: 0.9;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 32px; }
+            .scenarios-grid { grid-template-columns: 1fr; }
+            .modal-content { padding: 25px; margin: 20px auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💼 Scenari Pratici EIPASS</h1>
+            <p>Metti alla prova le tue competenze con casi reali</p>
+        </div>
+
+        <div class="intro-card">
+            <h2>🎯 Come Funziona</h2>
+            <p>Questi scenari simulano situazioni lavorative reali che richiedono l'applicazione delle competenze EIPASS. Ogni scenario include:</p>
+            <ul>
+                <li><strong>Situazione realistica</strong> da affrontare</li>
+                <li><strong>Compiti specifici</strong> da completare</li>
+                <li><strong>Checklist di valutazione</strong> per verificare il tuo lavoro</li>
+                <li><strong>Soluzione guidata</strong> (da consultare dopo aver provato)</li>
+                <li><strong>Punteggio</strong> basato sulla completezza e correttezza</li>
+            </ul>
+            <p style="margin-top: 20px;"><strong>💡 Suggerimento:</strong> Prova a risolvere lo scenario autonomamente prima di guardare la soluzione!</p>
+        </div>
+
+        <div class="scenarios-grid">
+            <!-- SCENARIO 1 -->
+            <div class="scenario-card office" onclick="openScenario(1)">
+                <span class="difficulty-badge facile">📗 Facile</span>
+                <span class="scenario-icon">📊</span>
+                <h3 class="scenario-title">Report Vendite Trimestrale</h3>
+                <div class="time-badge">⏱️ 30-40 minuti</div>
+                <p class="scenario-description">
+                    Il tuo responsabile ti chiede di creare un report completo delle vendite del trimestre con dati, grafici e presentazione.
+                </p>
+                <div class="skills-tags">
+                    <span class="skill-tag">Excel</span>
+                    <span class="skill-tag">PowerPoint</span>
+                    <span class="skill-tag">Word</span>
+                </div>
+                <button class="start-btn">Inizia Scenario →</button>
+            </div>
+
+            <!-- SCENARIO 2 -->
+            <div class="scenario-card remote" onclick="openScenario(2)">
+                <span class="difficulty-badge medio">📙 Medio</span>
+                <span class="scenario-icon">💻</span>
+                <h3 class="scenario-title">Organizzazione Meeting Remoto</h3>
+                <div class="time-badge">⏱️ 25-35 minuti</div>
+                <p class="scenario-description">
+                    Devi organizzare una riunione virtuale con 15 partecipanti, condividere documenti e gestire la collaborazione online.
+                </p>
+                <div class="skills-tags">
+                    <span class="skill-tag">Cloud</span>
+                    <span class="skill-tag">Email</span>
+                    <span class="skill-tag">Collaborazione</span>
+                </div>
+                <button class="start-btn">Inizia Scenario →</button>
+            </div>
+
+            <!-- SCENARIO 3 -->
+            <div class="scenario-card security" onclick="openScenario(3)">
+                <span class="difficulty-badge medio">📙 Medio</span>
+                <span class="scenario-icon">🔐</span>
+                <h3 class="scenario-title">Emergenza Sicurezza IT</h3>
+                <div class="time-badge">⏱️ 20-30 minuti</div>
+                <p class="scenario-description">
+                    Hai ricevuto un'email sospetta e il computer mostra comportamenti strani. Devi mettere in sicurezza il sistema e i dati.
+                </p>
+                <div class="skills-tags">
+                    <span class="skill-tag">Sicurezza</span>
+                    <span class="skill-tag">Backup</span>
+                    <span class="skill-tag">Password</span>
+                </div>
+                <button class="start-btn">Inizia Scenario →</button>
+            </div>
+
+            <!-- SCENARIO 4 -->
+            <div class="scenario-card presentation" onclick="openScenario(4)">
+                <span class="difficulty-badge difficile">📕 Difficile</span>
+                <span class="scenario-icon">🎤</span>
+                <h3 class="scenario-title">Presentazione Progetto Cliente</h3>
+                <div class="time-badge">⏱️ 45-60 minuti</div>
+                <p class="scenario-description">
+                    Devi presentare un progetto importante a un cliente: presentazione PowerPoint, documenti di supporto, email professionale.
+                </p>
+                <div class="skills-tags">
+                    <span class="skill-tag">PowerPoint</span>
+                    <span class="skill-tag">Word</span>
+                    <span class="skill-tag">Email</span>
+                </div>
+                <button class="start-btn">Inizia Scenario →</button>
+            </div>
+
+            <!-- SCENARIO 5 -->
+            <div class="scenario-card data" onclick="openScenario(5)">
+                <span class="difficulty-badge difficile">📕 Difficile</span>
+                <span class="scenario-icon">📈</span>
+                <h3 class="scenario-title">Analisi Dati e Budget</h3>
+                <div class="time-badge">⏱️ 40-50 minuti</div>
+                <p class="scenario-description">
+                    Analizza i dati dell'ultimo anno, crea un budget previsionale e presenta i risultati con grafici professionali.
+                </p>
+                <div class="skills-tags">
+                    <span class="skill-tag">Excel</span>
+                    <span class="skill-tag">Formule</span>
+                    <span class="skill-tag">Grafici</span>
+                </div>
+                <button class="start-btn">Inizia Scenario →</button>
+            </div>
+
+            <!-- SCENARIO 6 -->
+            <div class="scenario-card collaboration" onclick="openScenario(6)">
+                <span class="difficulty-badge medio">📙 Medio</span>
+                <span class="scenario-icon">👥</span>
+                <h3 class="scenario-title">Progetto di Gruppo Online</h3>
+                <div class="time-badge">⏱️ 30-40 minuti</div>
+                <p class="scenario-description">
+                    Coordina un team remoto per completare un documento collaborativo, organizzare file e comunicare efficacemente.
+                </p>
+                <div class="skills-tags">
+                    <span class="skill-tag">Google Drive</span>
+                    <span class="skill-tag">Team</span>
+                    <span class="skill-tag">Documenti</span>
+                </div>
+                <button class="start-btn">Inizia Scenario →</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>💡 <strong>Suggerimento:</strong> Prova ogni scenario come se fosse una situazione reale di lavoro</p>
+            <p>🎯 Cerca di completare tutti i compiti prima di guardare la soluzione</p>
+        </div>
+    </div>
+
+    <!-- MODAL SCENARI -->
+    <div id="scenarioModal" class="modal"></div>
+
+    <script>
+        const scenarios = {
+            1: {
+                icon: "📊",
+                title: "Report Vendite Trimestrale",
+                difficulty: "Facile",
+                time: "30-40 minuti",
+                situation: `
+                    <h3>📋 La Situazione</h3>
+                    <p>Sei l'assistente amministrativo di una piccola azienda. Il tuo responsabile, il Dott. Rossi, ti ha appena inviato un'email con i dati delle vendite dell'ultimo trimestre in un file Excel disordinato.</p>
+                    <p><strong>Email ricevuta:</strong></p>
+                    <p style="font-style: italic; background: #f1f5f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    "Buongiorno,<br>
+                    Ti allego i dati delle vendite Q4 2024. Ho bisogno che tu:<br>
+                    1. Organizzi i dati in modo professionale<br>
+                    2. Crei grafici che mostrino l'andamento<br>
+                    3. Mi prepari una presentazione di 5-6 slide per il consiglio<br>
+                    4. Scriva un documento Word di 1 pagina con il riepilogo<br>
+                    <br>
+                    Serve tutto per domani mattina alle 9:00.<br>
+                    Grazie!<br>
+                    Dott. Rossi"
+                    </p>
+                `,
+                tasks: [
+                    { text: "Aprire il file Excel e organizzare i dati (colonne: Mese, Prodotto, Quantità, Ricavo)", points: 15 },
+                    { text: "Calcolare i totali per mese usando la funzione SOMMA", points: 10 },
+                    { text: "Creare un grafico a colonne per visualizzare le vendite mensili", points: 15 },
+                    { text: "Creare un grafico a torta per la distribuzione dei prodotti", points: 15 },
+                    { text: "Creare una presentazione PowerPoint con: titolo, dati principali, grafici, conclusioni", points: 20 },
+                    { text: "Scrivere un documento Word di riepilogo (1 pagina) con i punti salienti", points: 15 },
+                    { text: "Salvare tutti i file con nomi appropriati (Report_Vendite_Q4_2024)", points: 10 }
+                ],
+                checklist: [
+                    "Excel: Dati organizzati in colonne chiare",
+                    "Excel: Formule SOMMA corrette",
+                    "Excel: Almeno 2 grafici professionali",
+                    "PowerPoint: Minimo 5 diapositive",
+                    "PowerPoint: Grafici Excel inseriti",
+                    "PowerPoint: Design coerente e professionale",
+                    "Word: Documento di 1 pagina con riepilogo",
+                    "Word: Formattazione professionale",
+                    "Tutti i file salvati con nomi corretti",
+                    "Tutti i file pronti per l'invio"
+                ],
+                solution: [
+                    "<strong>EXCEL:</strong> Organizza i dati con intestazioni chiare (Mese | Prodotto | Quantità | Ricavo). Usa =SOMMA(intervallo) per i totali. Inserisci > Grafici > Colonne/Torta.",
+                    "<strong>POWERPOINT:</strong> Slide 1: Titolo 'Report Vendite Q4 2024' | Slide 2: Dati generali | Slide 3-4: Grafici Excel (copia/incolla) | Slide 5: Conclusioni | Slide 6: Ringraziamenti",
+                    "<strong>WORD:</strong> Intestazione con logo/data, paragrafo introduttivo, elenco puntato con i 3 punti chiave, conclusione breve. Usa stili predefiniti per professionalità.",
+                    "<strong>SALVATAGGIO:</strong> Report_Vendite_Q4_2024.xlsx | Presentazione_Vendite_Q4_2024.pptx | Riepilogo_Vendite_Q4_2024.docx"
+                ]
+            },
+            2: {
+                icon: "💻",
+                title: "Organizzazione Meeting Remoto",
+                difficulty: "Medio",
+                time: "25-35 minuti",
+                situation: `
+                    <h3>📋 La Situazione</h3>
+                    <p>Sei il coordinatore di un progetto e devi organizzare una riunione online con 15 colleghi sparsi in diverse città. La riunione è per discutere il nuovo progetto "Innovazione 2025".</p>
+                    <p><strong>Cosa ti viene richiesto:</strong></p>
+                    <p style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    - Programmare la riunione per giovedì prossimo alle 15:00<br>
+                    - Creare un ordine del giorno<br>
+                    - Preparare i documenti da condividere<br>
+                    - Inviare l'invito con tutte le informazioni necessarie<br>
+                    - Organizzare una cartella condivisa su Google Drive
+                    </p>
+                `,
+                tasks: [
+                    { text: "Creare un documento Word con l'ordine del giorno della riunione", points: 15 },
+                    { text: "Creare una cartella su Google Drive chiamata 'Progetto_Innovazione_2025'", points: 10 },
+                    { text: "Caricare il documento nella cartella e condividerla con permessi di visualizzazione", points: 15 },
+                    { text: "Scrivere un'email di invito professionale con: data, ora, link meeting, ordine del giorno", points: 20 },
+                    { text: "Preparare un foglio Excel per registrare le presenze", points: 10 },
+                    { text: "Creare un documento condiviso per i verbali della riunione", points: 15 },
+                    { text: "Inviare un promemoria 24h prima con le istruzioni di accesso", points: 15 }
+                ],
+                checklist: [
+                    "Ordine del giorno completo e chiaro",
+                    "Cartella Google Drive creata",
+                    "Permessi di condivisione corretti",
+                    "Email invito professionale inviata",
+                    "Foglio presenze preparato",
+                    "Documento verbale condiviso",
+                    "Link meeting funzionante",
+                    "Istruzioni tecniche chiare",
+                    "Promemoria programmato",
+                    "Tutti i documenti accessibili"
+                ],
+                solution: [
+                    "<strong>WORD - Ordine del Giorno:</strong> Titolo, data/ora, elenco numerato degli argomenti (1. Introduzione 2. Presentazione progetto 3. Discussione 4. Prossimi passi), tempo stimato per ogni punto.",
+                    "<strong>GOOGLE DRIVE:</strong> Crea cartella, carica documenti, Condividi > Ottieni link > Chiunque abbia il link può visualizzare. Copia link.",
+                    "<strong>EMAIL:</strong> Oggetto: 'Invito Riunione - Progetto Innovazione 2025 - 15/12 ore 15:00' | Corpo: Saluto, data/ora, link Zoom/Meet, ordine del giorno, link Google Drive, firma professionale.",
+                    "<strong>EXCEL Presenze:</strong> Colonne: Nome | Cognome | Email | Presente (Sì/No) | Note"
+                ]
+            },
+            3: {
+                icon: "🔐",
+                title: "Emergenza Sicurezza IT",
+                difficulty: "Medio",
+                time: "20-30 minuti",
+                situation: `
+                    <h3>📋 La Situazione</h3>
+                    <p>Questa mattina hai ricevuto un'email che sembrava provenire dalla tua banca con scritto "URGENTE: Conferma i tuoi dati entro 24h o il conto verrà bloccato". Hai cliccato sul link ma poi ti sei insospettito.</p>
+                    <p>Inoltre, il computer è diventato lento e compaiono popup strani. Hai documenti importanti sul desktop e non hai mai fatto un backup.</p>
+                    <p style="background: #fee2e2; padding: 15px; border-radius: 8px; margin-top: 10px; color: #991b1b;">
+                    ⚠️ <strong>SITUAZIONE CRITICA:</strong> Devi agire subito per proteggere i tuoi dati e il sistema!
+                    </p>
+                `,
+                tasks: [
+                    { text: "Identificare i segnali di phishing nell'email ricevuta", points: 15 },
+                    { text: "Disconnettere immediatamente il PC da Internet", points: 10 },
+                    { text: "Cambiare tutte le password importanti da un dispositivo sicuro", points: 20 },
+                    { text: "Fare un backup di emergenza dei documenti importanti su chiavetta USB", points: 20 },
+                    { text: "Eseguire una scansione antivirus/antimalware completa", points: 15 },
+                    { text: "Segnalare l'email di phishing alla banca e cancellare il messaggio", points: 10 },
+                    { text: "Attivare l'autenticazione a due fattori (2FA) su tutti gli account principali", points: 10 }
+                ],
+                checklist: [
+                    "Email di phishing identificata correttamente",
+                    "PC disconnesso da Internet",
+                    "Password cambiate con password sicure",
+                    "Backup documenti completato",
+                    "Antivirus aggiornato ed eseguito",
+                    "Email di phishing segnalata",
+                    "2FA attivato su account critici",
+                    "Sistema pulito e sicuro",
+                    "Piano backup futuro definito",
+                    "Lezione imparata!"
+                ],
+                solution: [
+                    "<strong>SEGNALI PHISHING:</strong> Email urgente/minacciosa, errori grammaticali, mittente sospetto, link strano (non dominio ufficiale banca), richiesta dati sensibili via email.",
+                    "<strong>AZIONI IMMEDIATE:</strong> 1. Disconnetti WiFi/cavo | 2. Non inserire altri dati | 3. Usa smartphone per cambiare password | 4. Copia file importanti su USB.",
+                    "<strong>PASSWORD SICURA:</strong> Minimo 12 caratteri, maiuscole/minuscole, numeri, simboli. Esempio: C0rs0Eip@ss2024! Diversa per ogni account importante.",
+                    "<strong>2FA:</strong> Google/Apple/Microsoft > Sicurezza > Verifica in due passaggi > Attiva. Usa app (Google Authenticator) invece di SMS quando possibile.",
+                    "<strong>PREVENZIONE FUTURA:</strong> Backup settimanale automatico, antivirus sempre attivo, diffidare di email urgenti, verificare mittente prima di cliccare link."
+                ]
+            },
+            4: {
+                icon: "🎤",
+                title: "Presentazione Progetto Cliente",
+                difficulty: "Difficile",
+                time: "45-60 minuti",
+                situation: `
+                    <h3>📋 La Situazione</h3>
+                    <p>La tua azienda ha l'opportunità di ottenere un importante contratto. Devi presentare il progetto "Smart Office 2025" al Direttore Acquisti della società cliente, Ing. Martini, giovedì alle 10:00.</p>
+                    <p><strong>Materiali richiesti:</strong></p>
+                    <p style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    1. Presentazione PowerPoint professionale (10-12 slide)<br>
+                    2. Documento Word dettagliato del progetto (3-4 pagine)<br>
+                    3. Preventivo in Excel con calcoli automatici<br>
+                    4. Email di presentazione formale<br>
+                    5. Cartella Drive condivisa con tutti i materiali
+                    </p>
+                `,
+                tasks: [
+                    { text: "Creare presentazione PowerPoint con: copertina, azienda, problema, soluzione, vantaggi, timeline, team, costi, contatti", points: 25 },
+                    { text: "Documento Word: introduzione, analisi esigenze, proposta dettagliata, specifiche tecniche, conclusioni", points: 20 },
+                    { text: "Preventivo Excel: voci di costo, quantità, prezzi unitari, subtotali, IVA, totale finale", points: 20 },
+                    { text: "Email formale di presentazione con allegati e link Drive", points: 15 },
+                    { text: "Cartella Google Drive organizzata e condivisa", points: 10 },
+                    { text: "Verificare coerenza tra tutti i documenti (nomi, cifre, date)", points: 10 }
+                ],
+                checklist: [
+                    "PowerPoint: Design professionale e coerente",
+                    "PowerPoint: 10-12 slide ben strutturate",
+                    "PowerPoint: Grafica di qualità",
+                    "Word: Documento ben formattato (3-4 pagine)",
+                    "Word: Indice, intestazioni, piè di pagina",
+                    "Excel: Preventivo con formule corrette",
+                    "Excel: Totali calcolati automaticamente",
+                    "Email: Formale e professionale",
+                    "Drive: Cartella ben organizzata",
+                    "Tutti i documenti coerenti tra loro"
+                ],
+                solution: [
+                    "<strong>POWERPOINT:</strong> Tema aziendale professionale | Slide 1: Titolo progetto+logo | S2: Chi siamo | S3-4: Il problema del cliente | S5-6: La nostra soluzione | S7: Vantaggi | S8: Timeline | S9: Team | S10: Investimento | S11: Contatti",
+                    "<strong>WORD:</strong> Intestazione con logo | Indice automatico | Sezione 1: Executive Summary | Sezione 2: Analisi | Sezione 3: Proposta | Sezione 4: Specifiche | Conclusioni | Usa stili Titolo 1, 2, 3",
+                    "<strong>EXCEL:</strong> Colonne: Descrizione | Quantità | Prezzo Unitario | Subtotale (=Quantità*Prezzo) | Totale parziale | IVA 22% (=Totale*0.22) | TOTALE FINALE (=Totale+IVA)",
+                    "<strong>EMAIL:</strong> Oggetto: 'Proposta Progetto Smart Office 2025 - [TUA AZIENDA]' | Gentile Ing. Martini | Corpo: presentazione breve, riferimento incontro, allegati, disponibilità | Firma: Nome, Ruolo, Azienda, Contatti"
+                ]
+            },
+            5: {
+                icon: "📈",
+                title: "Analisi Dati e Budget",
+                difficulty: "Difficile",
+                time: "40-50 minuti",
+                situation: `
+                    <h3>📋 La Situazione</h3>
+                    <p>Sei il responsabile amministrativo e devi preparare il report annuale 2024 e il budget previsionale 2025 per la direzione aziendale.</p>
+                    <p>Hai a disposizione i dati grezzi delle spese e ricavi mensili del 2024 e devi presentare un'analisi completa con proiezioni per l'anno prossimo.</p>
+                    <p style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <strong>Deliverable richiesti:</strong><br>
+                    - Analisi completa Excel con grafici<br>
+                    - Report PowerPoint per il board<br>
+                    - Documento strategico Word<br>
+                    - Budget 2025 con formule dinamiche
+                    </p>
+                `,
+                tasks: [
+                    { text: "Excel: Organizzare dati 2024 (Mese, Ricavi, Costi Fissi, Costi Variabili, Utile)", points: 15 },
+                    { text: "Excel: Calcolare l'utile mensile con formula (=Ricavi-Costi Fissi-Costi Variabili)", points: 10 },
+                    { text: "Excel: Calcolare media, massimo, minimo di ricavi e costi con funzioni", points: 15 },
+                    { text: "Excel: Creare grafico andamento utile annuale", points: 10 },
+                    { text: "Excel: Creare budget 2025 con crescita +10% ricavi e contenimento costi", points: 20 },
+                    { text: "PowerPoint: Presentazione con analisi 2024 e proiezioni 2025 (8-10 slide)", points: 15 },
+                    { text: "Word: Report strategico con analisi SWOT e raccomandazioni", points: 15 }
+                ],
+                checklist: [
+                    "Dati 2024 completi e organizzati",
+                    "Formule Excel corrette e funzionanti",
+                    "Funzioni MEDIA, MAX, MIN utilizzate",
+                    "Grafici chiari e professionali",
+                    "Budget 2025 realistico e calcolato",
+                    "PowerPoint con dati coerenti",
+                    "Visualizzazioni efficaci dei dati",
+                    "Report Word ben strutturato",
+                    "Analisi SWOT completa",
+                    "Raccomandazioni concrete"
+                ],
+                solution: [
+                    "<strong>EXCEL - Analisi 2024:</strong> Colonne: Mese | Ricavi | Costi Fissi | Costi Variabili | Utile (formula) | Usa =MEDIA(range), =MAX(range), =MIN(range) per statistiche | Formattazione tabella professionale",
+                    "<strong>EXCEL - Budget 2025:</strong> Copia struttura 2024 | Ricavi 2025 = Ricavi 2024 * 1.10 | Mantieni costi fissi | Costi variabili proporzionali | Calcola utile previsto | Confronta con 2024",
+                    "<strong>GRAFICI:</strong> Grafico a linee per trend annuale utile | Grafico a colonne raggruppate per confronto 2024 vs 2025 | Grafico a torta per distribuzione costi",
+                    "<strong>POWERPOINT:</strong> S1: Titolo | S2: Executive Summary | S3-4: Performance 2024 (grafici) | S5: Analisi costi | S6-7: Proiezioni 2025 | S8: Confronto anni | S9: Raccomandazioni | S10: Q&A",
+                    "<strong>WORD - Report:</strong> Copertina | Indice | Sezione 1: Overview 2024 | Sezione 2: Analisi dettagliata | Sezione 3: SWOT (Strengths, Weaknesses, Opportunities, Threats) | Sezione 4: Budget 2025 | Sezione 5: Raccomandazioni strategiche"
+                ]
+            },
+            6: {
+                icon: "👥",
+                title: "Progetto di Gruppo Online",
+                difficulty: "Medio",
+                time: "30-40 minuti",
+                situation: `
+                    <h3>📋 La Situazione</h3>
+                    <p>Sei il team leader di un gruppo di 5 persone che deve collaborare a distanza per completare un progetto entro una settimana. Il progetto consiste nella creazione di un manuale utente per un nuovo software.</p>
+                    <p><strong>Il tuo team:</strong></p>
+                    <p style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    - Marco: Responsabile contenuti tecnici<br>
+                    - Sara: Grafica e impaginazione<br>
+                    - Luca: Testing e screenshot<br>
+                    - Anna: Revisione testi<br>
+                    - Tu: Coordinamento e consegna finale
+                    </p>
+                `,
+                tasks: [
+                    { text: "Creare cartella Google Drive 'Manuale_Software_v1' con sottocartelle organizzate", points: 15 },
+                    { text: "Creare documento Word condiviso per il manuale con struttura base", points: 15 },
+                    { text: "Creare foglio Excel con task list e assegnazioni (chi fa cosa, deadline)", points: 15 },
+                    { text: "Impostare permessi corretti per ogni membro del team", points: 10 },
+                    { text: "Scrivere email di kick-off al team con istruzioni chiare", points: 15 },
+                    { text: "Creare documento per i verbali delle riunioni", points: 10 },
+                    { text: "Programmare 3 check-point settimanali con calendar invite", points: 10 },
+                    { text: "Preparare template feedback per le revisioni reciproche", points: 10 }
+                ],
+                checklist: [
+                    "Cartella Drive ben organizzata",
+                    "Sottocartelle: Documenti, Immagini, Bozze, Finale",
+                    "Documento manuale con indice base",
+                    "Task list Excel completa",
+                    "Permessi assegnati correttamente",
+                    "Email kick-off professionale",
+                    "Documento verbali condiviso",
+                    "Calendar invite inviati",
+                    "Template feedback pronto",
+                    "Team allineato e operativo"
+                ],
+                solution: [
+                    "<strong>DRIVE - Struttura:</strong> Cartella principale: Manuale_Software_v1 | Sottocartelle: /Documenti /Immagini /Bozze /Versione_Finale /Meeting_Notes | Condividi con tutti come Editor",
+                    "<strong>WORD - Manuale:</strong> Titolo: 'Manuale Utente Software XYZ v1.0' | Indice automatico | Sezioni: 1.Introduzione 2.Installazione 3.Funzioni base 4.Funzioni avanzate 5.FAQ 6.Supporto | Lascia placeholder per ogni sezione",
+                    "<strong>EXCEL - Task List:</strong> Colonne: Task | Assegnato a | Data inizio | Deadline | Status | Note | Priority | Usa filtri e colori per urgenze | Condividi con permessi di modifica",
+                    "<strong>EMAIL Kick-off:</strong> Oggetto: '[KICK-OFF] Progetto Manuale Software - Start!' | Corpo: Benvenuto team, obiettivo progetto, deadline finale, link Drive, task assegnati, prossimo meeting, disponibilità per domande",
+                    "<strong>COORDINAMENTO:</strong> Meeting: Lunedì/Mercoledì/Venerdì ore 15:00 (30min) | Verbali: chi presente, avanzamenti, problemi, decisioni, prossimi step | Template feedback: Cosa va bene + Cosa migliorare + Suggerimenti"
+                ]
+            }
+        };
+
+        function openScenario(id) {
+            const scenario = scenarios[id];
+            const modal = document.getElementById('scenarioModal');
+            
+            let tasksHTML = '';
+            let totalPoints = 0;
+            scenario.tasks.forEach((task, index) => {
+                tasksHTML += `
+                    <div class="task-item">
+                        <span class="task-number">${index + 1}</span>
+                        <span class="task-description">${task.text}</span>
+                        <span class="task-points">${task.points} punti</span>
+                    </div>
+                `;
+                totalPoints += task.points;
+            });
+            
+            let checklistHTML = '';
+            scenario.checklist.forEach((item, index) => {
+                checklistHTML += `
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check${id}_${index}">
+                        <label for="check${id}_${index}">${item}</label>
+                    </div>
+                `;
+            });
+            
+            let solutionHTML = '';
+            scenario.solution.forEach((step, index) => {
+                solutionHTML += `<div class="solution-step">${index + 1}. ${step}</div>`;
+            });
+            
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close-modal" onclick="closeModal()">×</span>
+                    
+                    <div class="scenario-header">
+                        <span style="font-size: 64px;">${scenario.icon}</span>
+                        <h2 style="font-size: 32px; color: #1e293b; margin: 20px 0 10px 0;">${scenario.title}</h2>
+                        <div style="display: flex; gap: 15px; align-items: center; justify-content: center;">
+                            <span class="difficulty-badge ${scenario.difficulty.toLowerCase()}">${scenario.difficulty}</span>
+                            <span class="time-badge">⏱️ ${scenario.time}</span>
+                            <span class="time-badge">🎯 ${totalPoints} punti totali</span>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-situation">
+                        ${scenario.situation}
+                    </div>
+                    
+                    <div class="tasks-section">
+                        <h3>📝 Compiti da Completare</h3>
+                        ${tasksHTML}
+                    </div>
+                    
+                    <div class="checklist">
+                        <h4>✅ Checklist di Verifica</h4>
+                        <p style="font-size: 14px; color: #166534; margin-bottom: 15px;">Spunta ogni elemento quando lo hai completato:</p>
+                        ${checklistHTML}
+                    </div>
+                    
+                    <div class="solution-toggle" onclick="toggleSolution(${id})">
+                        <h4>💡 Soluzione Guidata <span id="arrow${id}">▼</span></h4>
+                        <div class="solution-content" id="solution${id}">
+                            <p style="margin-bottom: 15px;"><strong>⚠️ Guarda la soluzione solo dopo aver provato a completare lo scenario!</strong></p>
+                            ${solutionHTML}
+                        </div>
+                    </div>
+                    
+                    <button class="complete-btn" onclick="completeScenario(${id})">✅ Ho Completato lo Scenario</button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('scenarioModal').style.display = 'none';
+        }
+        
+        function toggleSolution(id) {
+            const solution = document.getElementById('solution' + id);
+            const arrow = document.getElementById('arrow' + id);
+            if (solution.style.display === 'none' || solution.style.display === '') {
+                solution.style.display = 'block';
+                arrow.textContent = '▲';
+            } else {
+                solution.style.display = 'none';
+                arrow.textContent = '▼';
+            }
+        }
+        
+        function completeScenario(id) {
+            const checkboxes = document.querySelectorAll(`input[id^="check${id}_"]`);
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const total = checkboxes.length;
+            const percentage = Math.round((checked / total) * 100);
+            
+            let message = '';
+            if (percentage === 100) {
+                message = `🎉 Perfetto! Hai completato tutte le attività!\n\n✅ ${checked}/${total} task completati (${percentage}%)\n\nOttimo lavoro! Sei pronto per la situazione reale! 🚀`;
+            } else if (percentage >= 70) {
+                message = `👍 Buon lavoro! Hai completato la maggior parte delle attività.\n\n✅ ${checked}/${total} task completati (${percentage}%)\n\nRivedi gli elementi mancanti per raggiungere il 100%!`;
+            } else {
+                message = `📚 Continua così! Hai ancora alcuni elementi da completare.\n\n✅ ${checked}/${total} task completati (${percentage}%)\n\nRivedi la checklist e la soluzione guidata!`;
+            }
+            
+            alert(message);
+            
+            if (percentage === 100) {
+                closeModal();
+            }
+        }
+        
+        // Chiudi modal cliccando fuori
+        window.onclick = function(event) {
+            const modal = document.getElementById('scenarioModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
