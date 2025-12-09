@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test EIPASS - PowerPoint</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; color: white; padding: 60px 20px; }
+        .header h1 { font-size: 48px; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .header p { font-size: 20px; opacity: 0.95; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+        .content { background: white; border-radius: 20px; padding: 40px; margin-top: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .section { margin-bottom: 50px; }
+        .section h2 { color: #c2410c; font-size: 32px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid #f97316; }
+        .section p { color: #4a5568; font-size: 18px; line-height: 1.8; margin-bottom: 15px; }
+        .tests-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .test-card { background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%); border-radius: 15px; padding: 30px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; border: 2px solid #f97316; }
+        .test-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(249, 115, 22, 0.3); }
+        .test-icon { font-size: 48px; margin-bottom: 15px; }
+        .test-card h3 { color: #c2410c; font-size: 24px; margin-bottom: 15px; }
+        .test-card p { color: #ea580c; font-size: 16px; margin-bottom: 20px; }
+        .test-btn { display: inline-block; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; padding: 12px 30px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 16px; transition: transform 0.3s, box-shadow 0.3s; }
+        .test-btn:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4); }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .feature { background: #fff7ed; padding: 25px; border-radius: 12px; border-left: 4px solid #f97316; }
+        .feature-icon { font-size: 32px; margin-bottom: 10px; }
+        .feature h4 { color: #c2410c; font-size: 20px; margin-bottom: 10px; }
+        .feature p { color: #ea580c; font-size: 15px; line-height: 1.6; }
+        .footer { text-align: center; margin-top: 40px; padding: 30px; color: white; font-size: 16px; }
+        .nav-links { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .back-link { display: inline-block; background: white; color: #f97316; padding: 12px 30px; border-radius: 10px; text-decoration: none; font-weight: 600; transition: transform 0.3s, box-shadow 0.3s; }
+        .back-link:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(255,255,255,0.3); }
+        @media (max-width: 768px) { .header h1 { font-size: 36px; } .content { padding: 25px; } .section h2 { font-size: 26px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Test EIPASS PowerPoint</h1>
+            <p>Esercitati con i test basati sul programma ufficiale EIPASS per Microsoft PowerPoint</p>
+        </div>
+        <div class="content">
+            <div class="section">
+                <h2>📚 Materiali disponibili</h2>
+                <p>Questa sezione contiene 4 test completi (80 domande totali) basati sul programma ufficiale EIPASS per Microsoft PowerPoint. Ogni test copre argomenti specifici del programma e ti aiuterà a prepararti al meglio per l'esame.</p>
+                <div class="features">
+                    <div class="feature"><div class="feature-icon">✅</div><h4>80 Domande</h4><p>4 test da 20 domande ciascuno coprendo tutti gli argomenti del programma PowerPoint</p></div>
+                    <div class="feature"><div class="feature-icon">🎯</div><h4>Feedback Immediato</h4><p>Visualizza subito le risposte corrette e verifica il tuo punteggio</p></div>
+                    <div class="feature"><div class="feature-icon">📊</div><h4>Raccolta Dati</h4><p>I risultati vengono salvati automaticamente per monitorare i progressi</p></div>
+                    <div class="feature"><div class="feature-icon">🌐</div><h4>Sempre Accessibili</h4><p>Test disponibili online da qualsiasi dispositivo</p></div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>🧪 I Test</h2>
+                <div class="tests-grid">
+                    <div class="test-card"><div class="test-icon">📝</div><h3>Test 1</h3><p>Primi passi con PowerPoint</p><a href="test_ppt_1.html" class="test-btn">Inizia Test 1</a></div>
+                    <div class="test-card"><div class="test-icon">✍️</div><h3>Test 2</h3><p>Gestione e Formattazione del Testo</p><a href="test_ppt_2.html" class="test-btn">Inizia Test 2</a></div>
+                    <div class="test-card"><div class="test-icon">📊</div><h3>Test 3</h3><p>Tabelle, Grafici e Oggetti Grafici</p><a href="test_ppt_3.html" class="test-btn">Inizia Test 3</a></div>
+                    <div class="test-card"><div class="test-icon">🎬</div><h3>Test 4</h3><p>Transizioni, Animazioni e Gestione</p><a href="test_ppt_4.html" class="test-btn">Inizia Test 4</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>💡 <strong>Suggerimento:</strong> Completa tutti i test per una preparazione ottimale!</p>
+            <div class="nav-links">
+                <a href="index.html" class="back-link">← Word</a>
+                <a href="index_excel.html" class="back-link">← Excel</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

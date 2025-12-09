@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test EIPASS PowerPoint - Test 1: Primi passi</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #c2410c 0%, #9a3412 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 16px; }
+        .user-info { background: #f7fafc; padding: 25px 30px; border-bottom: 2px solid #e2e8f0; }
+        .user-info h3 { color: #2d3748; margin-bottom: 15px; font-size: 18px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #4a5568; font-weight: 500; }
+        .form-group input[type="text"], .form-group input[type="email"] { width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: #f97316; }
+        .form-group input:disabled { background-color: #edf2f7; cursor: not-allowed; }
+        .checkbox-group { display: flex; align-items: center; margin-top: 10px; }
+        .checkbox-group input[type="checkbox"] { margin-right: 8px; width: 18px; height: 18px; cursor: pointer; }
+        .checkbox-group label { margin: 0; cursor: pointer; user-select: none; }
+        .content { padding: 30px; }
+        .question { background: #f7fafc; padding: 20px; margin-bottom: 20px; border-radius: 10px; border-left: 4px solid #f97316; }
+        .question-text { font-weight: 600; color: #2d3748; margin-bottom: 15px; font-size: 16px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { display: flex; align-items: center; padding: 12px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .option:hover { border-color: #f97316; background: #f7fafc; }
+        .option input[type="radio"] { margin-right: 10px; cursor: pointer; }
+        .option label { cursor: pointer; flex: 1; }
+        .option.correct { background: #fed7aa; border-color: #f97316; }
+        .option.incorrect { background: #fee2e2; border-color: #ef4444; }
+        .submit-btn { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; border: none; padding: 15px 40px; font-size: 18px; border-radius: 10px; cursor: pointer; display: block; margin: 30px auto; transition: transform 0.3s, box-shadow 0.3s; font-weight: 600; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(249, 115, 22, 0.4); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .result { background: #edf2f7; padding: 25px; border-radius: 10px; margin-top: 30px; display: none; text-align: center; }
+        .result h2 { color: #2d3748; margin-bottom: 15px; }
+        .score { font-size: 48px; font-weight: bold; color: #f97316; margin: 20px 0; }
+        .percentage { font-size: 24px; color: #4a5568; margin-bottom: 20px; }
+        .success-message { background: #fed7aa; color: #9a3412; padding: 15px; border-radius: 8px; margin-top: 15px; display: none; border-left: 4px solid #f97316; }
+        .error-message { background: #fee2e2; color: #991b1b; padding: 10px 15px; border-radius: 8px; margin-top: 10px; display: none; border-left: 4px solid #ef4444; font-size: 14px; }
+        @media (max-width: 600px) { .header h1 { font-size: 24px; } .content { padding: 20px; } .question { padding: 15px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Test EIPASS PowerPoint - Test 1</h1>
+            <p>Primi passi con PowerPoint</p>
+        </div>
+        <div class="user-info">
+            <h3>👤 I tuoi dati</h3>
+            <div class="form-group">
+                <label for="userName">Nome e Cognome *</label>
+                <input type="text" id="userName" placeholder="Inserisci nome e cognome" required>
+            </div>
+            <div class="form-group">
+                <label for="userEmail">Email (facoltativa)</label>
+                <input type="email" id="userEmail" placeholder="Inserisci la tua email">
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="anonymous">
+                <label for="anonymous">Preferisco rimanere anonimo</label>
+            </div>
+            <div class="error-message" id="userError">⚠️ Inserisci il tuo nome o seleziona "Preferisco rimanere anonimo"</div>
+        </div>
+        <div class="content">
+            <form id="quizForm">
+                <div class="question">
+                    <div class="question-text">1. Cos'è PowerPoint?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Un programma per creare fogli di calcolo</label></div>
+                        <div class="option"><input type="radio" name="q1" value="b" id="q1b"><label for="q1b">Un'applicazione per creare presentazioni multimediali</label></div>
+                        <div class="option"><input type="radio" name="q1" value="c" id="q1c"><label for="q1c">Un editor di testo</label></div>
+                        <div class="option"><input type="radio" name="q1" value="d" id="q1d"><label for="q1d">Un browser web</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">2. Come si chiamano le pagine di una presentazione PowerPoint?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q2" value="a" id="q2a"><label for="q2a">Fogli</label></div>
+                        <div class="option"><input type="radio" name="q2" value="b" id="q2b"><label for="q2b">Diapositive (slides)</label></div>
+                        <div class="option"><input type="radio" name="q2" value="c" id="q2c"><label for="q2c">Pagine</label></div>
+                        <div class="option"><input type="radio" name="q2" value="d" id="q2d"><label for="q2d">Schede</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">3. Dove si trova la barra multifunzione in PowerPoint?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q3" value="a" id="q3a"><label for="q3a">In basso</label></div>
+                        <div class="option"><input type="radio" name="q3" value="b" id="q3b"><label for="q3b">Sul lato sinistro</label></div>
+                        <div class="option"><input type="radio" name="q3" value="c" id="q3c"><label for="q3c">Nella parte superiore, organizzata in schede</label></div>
+                        <div class="option"><input type="radio" name="q3" value="d" id="q3d"><label for="q3d">PowerPoint non ha la barra multifunzione</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">4. Cos'è il pannello diapositive?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q4" value="a" id="q4a"><label for="q4a">L'area laterale che mostra le miniature di tutte le diapositive</label></div>
+                        <div class="option"><input type="radio" name="q4" value="b" id="q4b"><label for="q4b">La barra in alto</label></div>
+                        <div class="option"><input type="radio" name="q4" value="c" id="q4c"><label for="q4c">Il menu File</label></div>
+                        <div class="option"><input type="radio" name="q4" value="d" id="q4d"><label for="q4d">La barra di stato</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">5. Si può scegliere un tema per la presentazione?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q5" value="a" id="q5a"><label for="q5a">No, tutte le presentazioni sono uguali</label></div>
+                        <div class="option"><input type="radio" name="q5" value="b" id="q5b"><label for="q5b">Sì, PowerPoint offre vari temi predefiniti</label></div>
+                        <div class="option"><input type="radio" name="q5" value="c" id="q5c"><label for="q5c">Solo nelle versioni professionali</label></div>
+                        <div class="option"><input type="radio" name="q5" value="d" id="q5d"><label for="q5d">Solo con software esterni</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">6. Quali sono le principali modalità di visualizzazione in PowerPoint?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q6" value="a" id="q6a"><label for="q6a">Normale, Sequenza diapositive, Visualizzazione lettura, Presentazione</label></div>
+                        <div class="option"><input type="radio" name="q6" value="b" id="q6b"><label for="q6b">Solo Presentazione</label></div>
+                        <div class="option"><input type="radio" name="q6" value="c" id="q6c"><label for="q6c">Solo Normale</label></div>
+                        <div class="option"><input type="radio" name="q6" value="d" id="q6d"><label for="q6d">PowerPoint non ha modalità diverse</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">7. Si può usare lo zoom in PowerPoint?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q7" value="a" id="q7a"><label for="q7a">Sì, per ingrandire o rimpicciolire la visualizzazione</label></div>
+                        <div class="option"><input type="radio" name="q7" value="b" id="q7b"><label for="q7b">No, la visualizzazione è fissa</label></div>
+                        <div class="option"><input type="radio" name="q7" value="c" id="q7c"><label for="q7c">Solo in modalità presentazione</label></div>
+                        <div class="option"><input type="radio" name="q7" value="d" id="q7d"><label for="q7d">Solo con software esterni</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">8. Come si aggiunge una nuova diapositiva?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q8" value="a" id="q8a"><label for="q8a">File > Nuova diapositiva</label></div>
+                        <div class="option"><input type="radio" name="q8" value="b" id="q8b"><label for="q8b">Home > Nuova diapositiva oppure Ctrl+M</label></div>
+                        <div class="option"><input type="radio" name="q8" value="c" id="q8c"><label for="q8c">Non si possono aggiungere diapositive</label></div>
+                        <div class="option"><input type="radio" name="q8" value="d" id="q8d"><label for="q8d">Solo duplicando quelle esistenti</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">9. Cos'è il layout di una diapositiva?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q9" value="a" id="q9a"><label for="q9a">Il colore di sfondo</label></div>
+                        <div class="option"><input type="radio" name="q9" value="b" id="q9b"><label for="q9b">La disposizione predefinita degli elementi (titolo, testo, immagini)</label></div>
+                        <div class="option"><input type="radio" name="q9" value="c" id="q9c"><label for="q9c">Il tipo di carattere</label></div>
+                        <div class="option"><input type="radio" name="q9" value="d" id="q9d"><label for="q9d">Il numero di diapositive</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">10. Si può cambiare il layout di una diapositiva dopo averla creata?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q10" value="a" id="q10a"><label for="q10a">Sì, da Home > Layout</label></div>
+                        <div class="option"><input type="radio" name="q10" value="b" id="q10b"><label for="q10b">No, il layout è fisso</label></div>
+                        <div class="option"><input type="radio" name="q10" value="c" id="q10c"><label for="q10c">Solo eliminando e ricreando la diapositiva</label></div>
+                        <div class="option"><input type="radio" name="q10" value="d" id="q10d"><label for="q10d">Solo nelle versioni professionali</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">11. Si può cambiare il colore di sfondo di una diapositiva?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q11" value="a" id="q11a"><label for="q11a">No, lo sfondo è sempre bianco</label></div>
+                        <div class="option"><input type="radio" name="q11" value="b" id="q11b"><label for="q11b">Sì, clic destro > Formato sfondo</label></div>
+                        <div class="option"><input type="radio" name="q11" value="c" id="q11c"><label for="q11c">Solo con software di grafica</label></div>
+                        <div class="option"><input type="radio" name="q11" value="d" id="q11d"><label for="q11d">Solo stampando</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">12. Come si duplica una diapositiva?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q12" value="a" id="q12a"><label for="q12a">Clic destro sulla diapositiva > Duplica diapositiva</label></div>
+                        <div class="option"><input type="radio" name="q12" value="b" id="q12b"><label for="q12b">Non si può duplicare</label></div>
+                        <div class="option"><input type="radio" name="q12" value="c" id="q12c"><label for="q12c">Solo con Ctrl+C e Ctrl+V</label></div>
+                        <div class="option"><input type="radio" name="q12" value="d" id="q12d"><label for="q12d">File > Duplica</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">13. Come si sposta una diapositiva?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q13" value="a" id="q13a"><label for="q13a">Le diapositive hanno ordine fisso</label></div>
+                        <div class="option"><input type="radio" name="q13" value="b" id="q13b"><label for="q13b">Trascinandola nel pannello diapositive</label></div>
+                        <div class="option"><input type="radio" name="q13" value="c" id="q13c"><label for="q13c">Solo eliminandola e ricreandola</label></div>
+                        <div class="option"><input type="radio" name="q13" value="d" id="q13d"><label for="q13d">File > Sposta diapositiva</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">14. Come si elimina una diapositiva?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q14" value="a" id="q14a"><label for="q14a">Non si possono eliminare diapositive</label></div>
+                        <div class="option"><input type="radio" name="q14" value="b" id="q14b"><label for="q14b">Selezionarla e premere Canc oppure clic destro > Elimina</label></div>
+                        <div class="option"><input type="radio" name="q14" value="c" id="q14c"><label for="q14c">Solo chiudendo PowerPoint</label></div>
+                        <div class="option"><input type="radio" name="q14" value="d" id="q14d"><label for="q14d">File > Elimina diapositiva</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">15. Si possono selezionare più diapositive contemporaneamente?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q15" value="a" id="q15a"><label for="q15a">Sì, tenendo premuto Ctrl e cliccando sulle diapositive</label></div>
+                        <div class="option"><input type="radio" name="q15" value="b" id="q15b"><label for="q15b">No, solo una alla volta</label></div>
+                        <div class="option"><input type="radio" name="q15" value="c" id="q15c"><label for="q15c">Solo nelle versioni professionali</label></div>
+                        <div class="option"><input type="radio" name="q15" value="d" id="q15d"><label for="q15d">Solo con Shift</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">16. Dove si trovano le impostazioni predefinite di PowerPoint?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q16" value="a" id="q16a"><label for="q16a">File > Opzioni</label></div>
+                        <div class="option"><input type="radio" name="q16" value="b" id="q16b"><label for="q16b">Home > Impostazioni</label></div>
+                        <div class="option"><input type="radio" name="q16" value="c" id="q16c"><label for="q16c">Non si possono modificare</label></div>
+                        <div class="option"><input type="radio" name="q16" value="d" id="q16d"><label for="q16d">Inserisci > Opzioni</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">17. Cos'è la barra di accesso rapido?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q17" value="a" id="q17a"><label for="q17a">La barra in basso</label></div>
+                        <div class="option"><input type="radio" name="q17" value="b" id="q17b"><label for="q17b">Una barra personalizzabile con i comandi più usati</label></div>
+                        <div class="option"><input type="radio" name="q17" value="c" id="q17c"><label for="q17c">Il pannello diapositive</label></div>
+                        <div class="option"><input type="radio" name="q17" value="d" id="q17d"><label for="q17d">Il menu File</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">18. Cos'è la barra di stato?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q18" value="a" id="q18a"><label for="q18a">La barra in basso che mostra informazioni sulla presentazione</label></div>
+                        <div class="option"><input type="radio" name="q18" value="b" id="q18b"><label for="q18b">La barra multifunzione</label></div>
+                        <div class="option"><input type="radio" name="q18" value="c" id="q18c"><label for="q18c">Il pannello diapositive</label></div>
+                        <div class="option"><input type="radio" name="q18" value="d" id="q18d"><label for="q18d">PowerPoint non ha barra di stato</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">19. In quale modalità si modifica normalmente la presentazione?</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q19" value="a" id="q19a"><label for="q19a">Modalità Normale</label></div>
+                        <div class="option"><input type="radio" name="q19" value="b" id="q19b"><label for="q19b">Modalità Presentazione</label></div>
+                        <div class="option"><input type="radio" name="q19" value="c" id="q19c"><label for="q19c">Sequenza diapositive</label></div>
+                        <div class="option"><input type="radio" name="q19" value="d" id="q19d"><label for="q19d">Visualizzazione lettura</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">20. La modalità "Sequenza diapositive" mostra:</div>
+                    <div class="options">
+                        <div class="option"><input type="radio" name="q20" value="a" id="q20a"><label for="q20a">Una sola diapositiva grande</label></div>
+                        <div class="option"><input type="radio" name="q20" value="b" id="q20b"><label for="q20b">Tutte le diapositive in miniatura per riorganizzarle facilmente</label></div>
+                        <div class="option"><input type="radio" name="q20" value="c" id="q20c"><label for="q20c">La presentazione a schermo intero</label></div>
+                        <div class="option"><input type="radio" name="q20" value="d" id="q20d"><label for="q20d">Solo il testo delle diapositive</label></div>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Invia Test</button>
+            </form>
+            <div class="result" id="result">
+                <h2>🎉 Test Completato!</h2>
+                <div class="score" id="score"></div>
+                <div class="percentage" id="percentage"></div>
+                <div class="success-message" id="successMessage">✅ I tuoi risultati sono stati salvati correttamente!</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxk68lInI6kObsveIAq_9DP2Kf2ul0UfTvdsi162Uag5zCxekkkM0Hc3s3ucxIdAg/exec';
+        const answers = { q1:'b', q2:'b', q3:'c', q4:'a', q5:'b', q6:'a', q7:'a', q8:'b', q9:'b', q10:'a', q11:'b', q12:'a', q13:'b', q14:'b', q15:'a', q16:'a', q17:'b', q18:'a', q19:'a', q20:'b' };
+        document.getElementById('anonymous').addEventListener('change', function() {
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+            if (this.checked) { userName.value = 'Anonimo'; userName.disabled = true; userEmail.disabled = true; }
+            else { userName.value = ''; userName.disabled = false; userEmail.disabled = false; }
+        });
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userName = document.getElementById('userName').value.trim();
+            const isAnonymous = document.getElementById('anonymous').checked;
+            const userError = document.getElementById('userError');
+            if (!userName && !isAnonymous) { userError.style.display = 'block'; window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+            userError.style.display = 'none';
+            let score = 0; let userAnswers = [];
+            for (let q in answers) {
+                const selected = document.querySelector(`input[name="${q}"]:checked`);
+                const correctAnswer = answers[q];
+                if (selected) {
+                    userAnswers.push(`${q}=${selected.value}`);
+                    if (selected.value === correctAnswer) { score++; selected.parentElement.classList.add('correct'); }
+                    else { selected.parentElement.classList.add('incorrect'); document.getElementById(q + correctAnswer).parentElement.classList.add('correct'); }
+                } else { userAnswers.push(`${q}=non_risposta`); document.getElementById(q + correctAnswer).parentElement.classList.add('correct'); }
+            }
+            const totalQuestions = Object.keys(answers).length;
+            const percentage = Math.round((score / totalQuestions) * 100);
+            document.getElementById('score').textContent = `${score}/${totalQuestions}`;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            document.getElementById('result').style.display = 'block';
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.disabled = true; submitBtn.textContent = 'Test Completato';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome: userName || 'Anonimo', email: document.getElementById('userEmail').value.trim() || 'Non fornita',
+                test: 'PowerPoint Test 1 - Primi passi', punteggio: `${score}/${totalQuestions}`, percentuale: percentage, risposte: userAnswers.join(', ') })
+            }).then(() => { document.getElementById('successMessage').style.display = 'block'; })
+            .catch(() => { document.getElementById('successMessage').style.display = 'block'; });
+        });
+    </script>
+</body>
+</html>

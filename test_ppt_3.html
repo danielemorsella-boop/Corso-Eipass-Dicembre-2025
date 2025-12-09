@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test EIPASS PowerPoint - Test 3: Tabelle e Grafici</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #c2410c 0%, #9a3412 100%); color: white; padding: 30px; text-align: center; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 16px; }
+        .user-info { background: #f7fafc; padding: 25px 30px; border-bottom: 2px solid #e2e8f0; }
+        .user-info h3 { color: #2d3748; margin-bottom: 15px; font-size: 18px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #4a5568; font-weight: 500; }
+        .form-group input[type="text"], .form-group input[type="email"] { width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: #f97316; }
+        .form-group input:disabled { background-color: #edf2f7; cursor: not-allowed; }
+        .checkbox-group { display: flex; align-items: center; margin-top: 10px; }
+        .checkbox-group input[type="checkbox"] { margin-right: 8px; width: 18px; height: 18px; cursor: pointer; }
+        .checkbox-group label { margin: 0; cursor: pointer; user-select: none; }
+        .content { padding: 30px; }
+        .question { background: #f7fafc; padding: 20px; margin-bottom: 20px; border-radius: 10px; border-left: 4px solid #f97316; }
+        .question-text { font-weight: 600; color: #2d3748; margin-bottom: 15px; font-size: 16px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { display: flex; align-items: center; padding: 12px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .option:hover { border-color: #f97316; background: #f7fafc; }
+        .option input[type="radio"] { margin-right: 10px; cursor: pointer; }
+        .option label { cursor: pointer; flex: 1; }
+        .option.correct { background: #fed7aa; border-color: #f97316; }
+        .option.incorrect { background: #fee2e2; border-color: #ef4444; }
+        .submit-btn { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; border: none; padding: 15px 40px; font-size: 18px; border-radius: 10px; cursor: pointer; display: block; margin: 30px auto; transition: transform 0.3s, box-shadow 0.3s; font-weight: 600; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(249, 115, 22, 0.4); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .result { background: #edf2f7; padding: 25px; border-radius: 10px; margin-top: 30px; display: none; text-align: center; }
+        .result h2 { color: #2d3748; margin-bottom: 15px; }
+        .score { font-size: 48px; font-weight: bold; color: #f97316; margin: 20px 0; }
+        .percentage { font-size: 24px; color: #4a5568; margin-bottom: 20px; }
+        .success-message { background: #fed7aa; color: #9a3412; padding: 15px; border-radius: 8px; margin-top: 15px; display: none; border-left: 4px solid #f97316; }
+        .error-message { background: #fee2e2; color: #991b1b; padding: 10px 15px; border-radius: 8px; margin-top: 10px; display: none; border-left: 4px solid #ef4444; font-size: 14px; }
+        @media (max-width: 600px) { .header h1 { font-size: 24px; } .content { padding: 20px; } .question { padding: 15px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Test EIPASS PowerPoint - Test 3</h1>
+            <p>Tabelle, Grafici e Oggetti Grafici</p>
+        </div>
+        <div class="user-info">
+            <h3>👤 I tuoi dati</h3>
+            <div class="form-group"><label for="userName">Nome e Cognome *</label><input type="text" id="userName" placeholder="Inserisci nome e cognome" required></div>
+            <div class="form-group"><label for="userEmail">Email (facoltativa)</label><input type="email" id="userEmail" placeholder="Inserisci la tua email"></div>
+            <div class="checkbox-group"><input type="checkbox" id="anonymous"><label for="anonymous">Preferisco rimanere anonimo</label></div>
+            <div class="error-message" id="userError">⚠️ Inserisci il tuo nome o seleziona "Preferisco rimanere anonimo"</div>
+        </div>
+        <div class="content">
+            <form id="quizForm">
+                <div class="question"><div class="question-text">1. Come si inserisce una tabella in PowerPoint?</div><div class="options">
+                    <div class="option"><input type="radio" name="q1" value="a" id="q1a"><label for="q1a">Inserisci > Tabella</label></div>
+                    <div class="option"><input type="radio" name="q1" value="b" id="q1b"><label for="q1b">Home > Tabella</label></div>
+                    <div class="option"><input type="radio" name="q1" value="c" id="q1c"><label for="q1c">Non si possono inserire tabelle</label></div>
+                    <div class="option"><input type="radio" name="q1" value="d" id="q1d"><label for="q1d">Solo da Excel</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">2. Come si inseriscono dati in una tabella?</div><div class="options">
+                    <div class="option"><input type="radio" name="q2" value="a" id="q2a"><label for="q2a">Facendo clic sulle celle e digitando</label></div>
+                    <div class="option"><input type="radio" name="q2" value="b" id="q2b"><label for="q2b">File > Inserisci dati</label></div>
+                    <div class="option"><input type="radio" name="q2" value="c" id="q2c"><label for="q2c">Non si possono inserire dati</label></div>
+                    <div class="option"><input type="radio" name="q2" value="d" id="q2d"><label for="q2d">Solo importandoli</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">3. Si può cambiare lo stile di una tabella?</div><div class="options">
+                    <div class="option"><input type="radio" name="q3" value="a" id="q3a"><label for="q3a">Sì, usando Strumenti tabella > Progettazione > Stili tabella</label></div>
+                    <div class="option"><input type="radio" name="q3" value="b" id="q3b"><label for="q3b">No, lo stile è fisso</label></div>
+                    <div class="option"><input type="radio" name="q3" value="c" id="q3c"><label for="q3c">Solo nelle versioni professionali</label></div>
+                    <div class="option"><input type="radio" name="q3" value="d" id="q3d"><label for="q3d">Solo con software esterni</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">4. Come si aggiungono righe a una tabella?</div><div class="options">
+                    <div class="option"><input type="radio" name="q4" value="a" id="q4a"><label for="q4a">Non si possono aggiungere</label></div>
+                    <div class="option"><input type="radio" name="q4" value="b" id="q4b"><label for="q4b">Clic destro > Inserisci > Inserisci righe</label></div>
+                    <div class="option"><input type="radio" name="q4" value="c" id="q4c"><label for="q4c">Solo ricreando la tabella</label></div>
+                    <div class="option"><input type="radio" name="q4" value="d" id="q4d"><label for="q4d">File > Aggiungi riga</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">5. Si possono eliminare righe o colonne da una tabella?</div><div class="options">
+                    <div class="option"><input type="radio" name="q5" value="a" id="q5a"><label for="q5a">Sì, clic destro > Elimina righe/colonne</label></div>
+                    <div class="option"><input type="radio" name="q5" value="b" id="q5b"><label for="q5b">No, la struttura è fissa</label></div>
+                    <div class="option"><input type="radio" name="q5" value="c" id="q5c"><label for="q5c">Solo nelle versioni professionali</label></div>
+                    <div class="option"><input type="radio" name="q5" value="d" id="q5d"><label for="q5d">Solo eliminando tutta la tabella</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">6. Come si inserisce un grafico in PowerPoint?</div><div class="options">
+                    <div class="option"><input type="radio" name="q6" value="a" id="q6a"><label for="q6a">Inserisci > Grafico</label></div>
+                    <div class="option"><input type="radio" name="q6" value="b" id="q6b"><label for="q6b">Home > Grafico</label></div>
+                    <div class="option"><input type="radio" name="q6" value="c" id="q6c"><label for="q6c">Non si possono inserire grafici</label></div>
+                    <div class="option"><input type="radio" name="q6" value="d" id="q6d"><label for="q6d">Solo da Excel</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">7. Si può cambiare il tipo di grafico dopo averlo creato?</div><div class="options">
+                    <div class="option"><input type="radio" name="q7" value="a" id="q7a"><label for="q7a">Sì, clic destro > Cambia tipo di grafico</label></div>
+                    <div class="option"><input type="radio" name="q7" value="b" id="q7b"><label for="q7b">No, va ricreato</label></div>
+                    <div class="option"><input type="radio" name="q7" value="c" id="q7c"><label for="q7c">Solo nelle versioni professionali</label></div>
+                    <div class="option"><input type="radio" name="q7" value="d" id="q7d"><label for="q7d">Solo con software esterni</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">8. Si possono inserire etichette dati in un grafico?</div><div class="options">
+                    <div class="option"><input type="radio" name="q8" value="a" id="q8a"><label for="q8a">Sì, Strumenti grafico > Aggiungi elemento grafico > Etichette dati</label></div>
+                    <div class="option"><input type="radio" name="q8" value="b" id="q8b"><label for="q8b">No, non si possono aggiungere</label></div>
+                    <div class="option"><input type="radio" name="q8" value="c" id="q8c"><label for="q8c">Solo nelle versioni professionali</label></div>
+                    <div class="option"><input type="radio" name="q8" value="d" id="q8d"><label for="q8d">Solo manualmente</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">9. Cos'è un organigramma?</div><div class="options">
+                    <div class="option"><input type="radio" name="q9" value="a" id="q9a"><label for="q9a">Un tipo di grafico</label></div>
+                    <div class="option"><input type="radio" name="q9" value="b" id="q9b"><label for="q9b">Un diagramma gerarchico che rappresenta la struttura organizzativa</label></div>
+                    <div class="option"><input type="radio" name="q9" value="c" id="q9c"><label for="q9c">Una tabella speciale</label></div>
+                    <div class="option"><input type="radio" name="q9" value="d" id="q9d"><label for="q9d">Un tipo di immagine</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">10. Come si inserisce un'immagine?</div><div class="options">
+                    <div class="option"><input type="radio" name="q10" value="a" id="q10a"><label for="q10a">Inserisci > Immagini</label></div>
+                    <div class="option"><input type="radio" name="q10" value="b" id="q10b"><label for="q10b">Home > Immagine</label></div>
+                    <div class="option"><input type="radio" name="q10" value="c" id="q10c"><label for="q10c">File > Inserisci immagine</label></div>
+                    <div class="option"><input type="radio" name="q10" value="d" id="q10d"><label for="q10d">Non si possono inserire immagini</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">11. Si possono inserire immagini online in PowerPoint?</div><div class="options">
+                    <div class="option"><input type="radio" name="q11" value="a" id="q11a"><label for="q11a">Sì, tramite Inserisci > Immagini online</label></div>
+                    <div class="option"><input type="radio" name="q11" value="b" id="q11b"><label for="q11b">No, solo dal computer</label></div>
+                    <div class="option"><input type="radio" name="q11" value="c" id="q11c"><label for="q11c">Solo nelle versioni professionali</label></div>
+                    <div class="option"><input type="radio" name="q11" value="d" id="q11d"><label for="q11d">Solo con software esterni</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">12. Come si inserisce una forma (rettangolo, cerchio, freccia)?</div><div class="options">
+                    <div class="option"><input type="radio" name="q12" value="a" id="q12a"><label for="q12a">Inserisci > Forme</label></div>
+                    <div class="option"><input type="radio" name="q12" value="b" id="q12b"><label for="q12b">Home > Forme</label></div>
+                    <div class="option"><input type="radio" name="q12" value="c" id="q12c"><label for="q12c">Non si possono inserire forme</label></div>
+                    <div class="option"><input type="radio" name="q12" value="d" id="q12d"><label for="q12d">Solo con software di grafica</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">13. Come si inserisce una casella di testo?</div><div class="options">
+                    <div class="option"><input type="radio" name="q13" value="a" id="q13a"><label for="q13a">File > Casella testo</label></div>
+                    <div class="option"><input type="radio" name="q13" value="b" id="q13b"><label for="q13b">Inserisci > Casella di testo</label></div>
+                    <div class="option"><input type="radio" name="q13" value="c" id="q13c"><label for="q13c">Non si può inserire</label></div>
+                    <div class="option"><input type="radio" name="q13" value="d" id="q13d"><label for="q13d">Solo con Enter</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">14. Cos'è WordArt?</div><div class="options">
+                    <div class="option"><input type="radio" name="q14" value="a" id="q14a"><label for="q14a">Un programma esterno</label></div>
+                    <div class="option"><input type="radio" name="q14" value="b" id="q14b"><label for="q14b">Testo decorativo con effetti grafici speciali</label></div>
+                    <div class="option"><input type="radio" name="q14" value="c" id="q14c"><label for="q14c">Un tipo di immagine</label></div>
+                    <div class="option"><input type="radio" name="q14" value="d" id="q14d"><label for="q14d">Una funzione di Word</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">15. Come si ridimensiona un oggetto grafico (immagine, forma)?</div><div class="options">
+                    <div class="option"><input type="radio" name="q15" value="a" id="q15a"><label for="q15a">Le dimensioni sono fisse</label></div>
+                    <div class="option"><input type="radio" name="q15" value="b" id="q15b"><label for="q15b">Trascinando i punti di ridimensionamento agli angoli</label></div>
+                    <div class="option"><input type="radio" name="q15" value="c" id="q15c"><label for="q15c">Solo con software di grafica</label></div>
+                    <div class="option"><input type="radio" name="q15" value="d" id="q15d"><label for="q15d">File > Ridimensiona</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">16. Come si sposta un oggetto grafico?</div><div class="options">
+                    <div class="option"><input type="radio" name="q16" value="a" id="q16a"><label for="q16a">Selezionandolo e trascinandolo</label></div>
+                    <div class="option"><input type="radio" name="q16" value="b" id="q16b"><label for="q16b">Non si può spostare</label></div>
+                    <div class="option"><input type="radio" name="q16" value="c" id="q16c"><label for="q16c">Solo con Ctrl+X e Ctrl+V</label></div>
+                    <div class="option"><input type="radio" name="q16" value="d" id="q16d"><label for="q16d">File > Sposta oggetto</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">17. Si possono raggruppare più oggetti grafici?</div><div class="options">
+                    <div class="option"><input type="radio" name="q17" value="a" id="q17a"><label for="q17a">Sì, selezionandoli e clic destro > Raggruppa</label></div>
+                    <div class="option"><input type="radio" name="q17" value="b" id="q17b"><label for="q17b">No, restano sempre separati</label></div>
+                    <div class="option"><input type="radio" name="q17" value="c" id="q17c"><label for="q17c">Solo nelle versioni professionali</label></div>
+                    <div class="option"><input type="radio" name="q17" value="d" id="q17d"><label for="q17d">Solo con software esterni</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">18. Si può ruotare un oggetto grafico?</div><div class="options">
+                    <div class="option"><input type="radio" name="q18" value="a" id="q18a"><label for="q18a">Sì, usando la maniglia di rotazione o Formato > Ruota</label></div>
+                    <div class="option"><input type="radio" name="q18" value="b" id="q18b"><label for="q18b">No, l'orientamento è fisso</label></div>
+                    <div class="option"><input type="radio" name="q18" value="c" id="q18c"><label for="q18c">Solo nelle versioni professionali</label></div>
+                    <div class="option"><input type="radio" name="q18" value="d" id="q18d"><label for="q18d">Solo con software di grafica</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">19. Si possono allineare più oggetti grafici?</div><div class="options">
+                    <div class="option"><input type="radio" name="q19" value="a" id="q19a"><label for="q19a">Sì, Formato > Allinea</label></div>
+                    <div class="option"><input type="radio" name="q19" value="b" id="q19b"><label for="q19b">No, vanno allineati manualmente</label></div>
+                    <div class="option"><input type="radio" name="q19" value="c" id="q19c"><label for="q19c">Solo nelle versioni professionali</label></div>
+                    <div class="option"><input type="radio" name="q19" value="d" id="q19d"><label for="q19d">Solo con software esterni</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">20. Si può cambiare l'ordine di sovrapposizione degli oggetti (portare avanti/indietro)?</div><div class="options">
+                    <div class="option"><input type="radio" name="q20" value="a" id="q20a"><label for="q20a">Sì, clic destro > Porta in primo piano/Porta in secondo piano</label></div>
+                    <div class="option"><input type="radio" name="q20" value="b" id="q20b"><label for="q20b">No, l'ordine è fisso</label></div>
+                    <div class="option"><input type="radio" name="q20" value="c" id="q20c"><label for="q20c">Solo eliminando e ricreando</label></div>
+                    <div class="option"><input type="radio" name="q20" value="d" id="q20d"><label for="q20d">Solo nelle versioni professionali</label></div>
+                </div></div>
+                <button type="submit" class="submit-btn">Invia Test</button>
+            </form>
+            <div class="result" id="result">
+                <h2>🎉 Test Completato!</h2>
+                <div class="score" id="score"></div>
+                <div class="percentage" id="percentage"></div>
+                <div class="success-message" id="successMessage">✅ I tuoi risultati sono stati salvati correttamente!</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxk68lInI6kObsveIAq_9DP2Kf2ul0UfTvdsi162Uag5zCxekkkM0Hc3s3ucxIdAg/exec';
+        const answers = { q1:'a', q2:'a', q3:'a', q4:'b', q5:'a', q6:'a', q7:'a', q8:'a', q9:'b', q10:'a', q11:'a', q12:'a', q13:'b', q14:'b', q15:'b', q16:'a', q17:'a', q18:'a', q19:'a', q20:'a' };
+        document.getElementById('anonymous').addEventListener('change', function() {
+            const userName = document.getElementById('userName'); const userEmail = document.getElementById('userEmail');
+            if (this.checked) { userName.value = 'Anonimo'; userName.disabled = true; userEmail.disabled = true; }
+            else { userName.value = ''; userName.disabled = false; userEmail.disabled = false; }
+        });
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userName = document.getElementById('userName').value.trim(); const isAnonymous = document.getElementById('anonymous').checked;
+            const userError = document.getElementById('userError');
+            if (!userName && !isAnonymous) { userError.style.display = 'block'; window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+            userError.style.display = 'none'; let score = 0; let userAnswers = [];
+            for (let q in answers) {
+                const selected = document.querySelector(`input[name="${q}"]:checked`); const correctAnswer = answers[q];
+                if (selected) {
+                    userAnswers.push(`${q}=${selected.value}`);
+                    if (selected.value === correctAnswer) { score++; selected.parentElement.classList.add('correct'); }
+                    else { selected.parentElement.classList.add('incorrect'); document.getElementById(q + correctAnswer).parentElement.classList.add('correct'); }
+                } else { userAnswers.push(`${q}=non_risposta`); document.getElementById(q + correctAnswer).parentElement.classList.add('correct'); }
+            }
+            const totalQuestions = Object.keys(answers).length; const percentage = Math.round((score / totalQuestions) * 100);
+            document.getElementById('score').textContent = `${score}/${totalQuestions}`;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            document.getElementById('result').style.display = 'block';
+            const submitBtn = document.querySelector('.submit-btn'); submitBtn.disabled = true; submitBtn.textContent = 'Test Completato';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome: userName || 'Anonimo', email: document.getElementById('userEmail').value.trim() || 'Non fornita',
+                test: 'PowerPoint Test 3 - Tabelle e Grafici', punteggio: `${score}/${totalQuestions}`, percentuale: percentage, risposte: userAnswers.join(', ') })
+            }).then(() => { document.getElementById('successMessage').style.display = 'block'; })
+            .catch(() => { document.getElementById('successMessage').style.display = 'block'; });
+        });
+    </script>
+</body>
+</html>

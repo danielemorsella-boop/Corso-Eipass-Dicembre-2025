@@ -1,0 +1,130 @@
+═══════════════════════════════════════════════════════════════
+   📦 ISTRUZIONI CARICAMENTO GITHUB - MATERIALI EIPASS
+═══════════════════════════════════════════════════════════════
+
+✅ TUTTO È PRONTO! Devi solo scaricare e caricare i file così come sono!
+
+═══════════════════════════════════════════════════════════════
+📋 ELENCO COMPLETO FILE DA SCARICARE (17 FILE)
+═══════════════════════════════════════════════════════════════
+
+🏠 HOMEPAGE PRINCIPALE (1 file)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ index.html                              ← Homepage principale del sito
+
+📝 WORD - 5 FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ index_word.html                         ← Pagina indice Word
+✓ test_cap1.html                          ← Word Test 1
+✓ test_cap2.html                          ← Word Test 2
+✓ test_cap3.html                          ← Word Test 3
+✓ test_cap4.html                          ← Word Test 4
+
+📊 EXCEL - 5 FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ index_excel.html                        ← Pagina indice Excel
+✓ test_excel_1.html                       ← Excel Test 1
+✓ test_excel_2.html                       ← Excel Test 2
+✓ test_excel_3.html                       ← Excel Test 3
+✓ test_excel_4.html                       ← Excel Test 4
+
+🎨 POWERPOINT - 5 FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ index_ppt.html                          ← Pagina indice PowerPoint
+✓ test_ppt_1.html                         ← PowerPoint Test 1
+✓ test_ppt_2.html                         ← PowerPoint Test 2
+✓ test_ppt_3.html                         ← PowerPoint Test 3
+✓ test_ppt_4.html                         ← PowerPoint Test 4
+
+🎓 SIMULAZIONE ESAME - 1 FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ simulazione_esame_eipass_completa.html  ← Simulazione 56 domande
+
+═══════════════════════════════════════════════════════════════
+🚀 PROCEDURA CARICAMENTO SU GITHUB
+═══════════════════════════════════════════════════════════════
+
+PASSO 1: SCARICA TUTTI I FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Scarica tutti i 17 file HTML nella stessa cartella del tuo computer.
+⚠️ NON modificare, NON rinominare, NON aprire i file!
+
+PASSO 2: CARICA SU GITHUB
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Vai sul tuo repository GitHub
+2. Clicca su "Add file" > "Upload files"
+3. Trascina tutti i 17 file nella finestra
+4. Scrivi un messaggio tipo: "Caricamento materiali EIPASS"
+5. Clicca "Commit changes"
+
+PASSO 3: ATTIVA GITHUB PAGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Vai su "Settings" (icona ingranaggio)
+2. Nel menu laterale clicca "Pages"
+3. Sotto "Source" seleziona:
+   - Branch: main (o master)
+   - Folder: / (root)
+4. Clicca "Save"
+5. Aspetta 2-3 minuti
+
+PASSO 4: APRI IL SITO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Il tuo sito sarà disponibile su:
+https://tuousername.github.io/nome-repository/
+
+═══════════════════════════════════════════════════════════════
+📁 STRUTTURA FINALE REPOSITORY
+═══════════════════════════════════════════════════════════════
+
+nome-repository/
+├── index.html                              ← Homepage (si apre automaticamente)
+├── index_word.html                         ← Indice Word
+├── index_excel.html                        ← Indice Excel
+├── index_ppt.html                          ← Indice PowerPoint
+├── test_cap1.html
+├── test_cap2.html
+├── test_cap3.html
+├── test_cap4.html
+├── test_excel_1.html
+├── test_excel_2.html
+├── test_excel_3.html
+├── test_excel_4.html
+├── test_ppt_1.html
+├── test_ppt_2.html
+├── test_ppt_3.html
+├── test_ppt_4.html
+└── simulazione_esame_eipass_completa.html
+
+═══════════════════════════════════════════════════════════════
+✅ VERIFICA FUNZIONAMENTO
+═══════════════════════════════════════════════════════════════
+
+Se tutto funziona vedrai:
+✓ Una homepage con 4 sezioni (Word, Excel, PowerPoint, Esame)
+✓ Puoi cliccare sui link e accedere a tutti i test
+✓ Tutti i test hanno il modulo Google Sheets collegato
+✓ Design responsivo che funziona anche su mobile
+
+═══════════════════════════════════════════════════════════════
+📊 GOOGLE SHEETS
+═══════════════════════════════════════════════════════════════
+
+Tutti i 13 test salvano i risultati nello STESSO Google Sheet:
+ID: 1-A0YzJebRjYvFU4kCyUHA_p9uH1YwWDN6-ptaTMe9cE
+
+═══════════════════════════════════════════════════════════════
+❓ PROBLEMI?
+═══════════════════════════════════════════════════════════════
+
+Se vedi schermata bianca:
+1. Controlla che GitHub Pages sia attivo (Settings > Pages)
+2. Aspetta 5 minuti dopo il primo caricamento
+3. Prova a ricaricare la pagina (Ctrl+F5)
+4. Verifica che tutti i 17 file siano stati caricati
+5. Controlla che il branch sia "main" o "master" in Pages
+
+═══════════════════════════════════════════════════════════════
+🎉 FATTO!
+═══════════════════════════════════════════════════════════════
+
+Buon lavoro! 🚀

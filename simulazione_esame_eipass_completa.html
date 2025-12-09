@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulazione Esame EIPASS 7 Moduli User</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%); color: white; padding: 30px; text-align: center; position: relative; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 16px; margin-bottom: 5px; }
+        .exam-info { background: #eef2ff; padding: 20px 30px; border-bottom: 2px solid #c7d2fe; }
+        .exam-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .info-item { text-align: center; padding: 15px; background: white; border-radius: 8px; border: 2px solid #818cf8; }
+        .info-label { font-size: 13px; color: #6366f1; font-weight: 600; margin-bottom: 5px; }
+        .info-value { font-size: 22px; color: #3730a3; font-weight: bold; }
+        .timer { position: fixed; top: 20px; right: 20px; background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 1000; border: 3px solid #6366f1; }
+        .timer-label { font-size: 14px; color: #6366f1; font-weight: 600; text-align: center; margin-bottom: 5px; }
+        .timer-value { font-size: 32px; color: #3730a3; font-weight: bold; text-align: center; font-family: 'Courier New', monospace; }
+        .timer.warning { border-color: #f59e0b; animation: pulse 1s infinite; }
+        .timer.danger { border-color: #ef4444; animation: pulse 0.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .user-info { background: #f7fafc; padding: 25px 30px; border-bottom: 2px solid #e2e8f0; }
+        .user-info h3 { color: #2d3748; margin-bottom: 15px; font-size: 18px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #4a5568; font-weight: 500; }
+        .form-group input[type="text"], .form-group input[type="email"] { width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: #6366f1; }
+        .form-group input:disabled { background-color: #edf2f7; cursor: not-allowed; }
+        .checkbox-group { display: flex; align-items: center; margin-top: 10px; }
+        .checkbox-group input[type="checkbox"] { margin-right: 8px; width: 18px; height: 18px; cursor: pointer; }
+        .checkbox-group label { margin: 0; cursor: pointer; user-select: none; }
+        .content { padding: 30px; }
+        .progress-bar { background: #e0e7ff; height: 8px; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #6366f1, #4f46e5); height: 100%; width: 0%; transition: width 0.3s; }
+        .question-counter { text-align: center; color: #6366f1; font-weight: 600; margin-bottom: 20px; font-size: 16px; }
+        .module-section { margin-bottom: 40px; border: 2px solid #c7d2fe; border-radius: 12px; padding: 20px; background: #fafbff; }
+        .module-header { background: linear-gradient(135deg, #818cf8, #6366f1); color: white; padding: 15px 20px; border-radius: 8px; margin: -20px -20px 20px -20px; font-size: 20px; font-weight: 700; text-align: center; }
+        .question { background: #f7fafc; padding: 20px; margin-bottom: 20px; border-radius: 10px; border-left: 4px solid #6366f1; }
+        .question-text { font-weight: 600; color: #2d3748; margin-bottom: 15px; font-size: 15px; }
+        .question-number { color: #6366f1; font-weight: 700; margin-right: 8px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { display: flex; align-items: center; padding: 12px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .option:hover { border-color: #6366f1; background: #eef2ff; }
+        .option input[type="radio"] { margin-right: 10px; cursor: pointer; accent-color: #6366f1; }
+        .option label { cursor: pointer; flex: 1; font-size: 14px; }
+        .option.correct { background: #d1fae5; border-color: #10b981; }
+        .option.incorrect { background: #fee2e2; border-color: #ef4444; }
+        .submit-btn { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; border: none; padding: 15px 40px; font-size: 18px; border-radius: 10px; cursor: pointer; display: block; margin: 30px auto; transition: transform 0.3s, box-shadow 0.3s; font-weight: 600; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .result { background: #eef2ff; padding: 30px; border-radius: 15px; margin-top: 30px; display: none; text-align: center; border: 3px solid #6366f1; }
+        .result h2 { color: #3730a3; margin-bottom: 20px; font-size: 28px; }
+        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 20px 0; }
+        .result-item { background: white; padding: 20px; border-radius: 10px; border: 2px solid #c7d2fe; }
+        .result-label { font-size: 13px; color: #6366f1; font-weight: 600; margin-bottom: 5px; }
+        .result-value { font-size: 28px; font-weight: bold; color: #3730a3; }
+        .result-status { font-size: 48px; margin: 20px 0; }
+        .result-status.passed { color: #10b981; }
+        .result-status.failed { color: #ef4444; }
+        .result-message { font-size: 20px; color: #4a5568; margin: 20px 0; font-weight: 600; }
+        .success-message { background: #d1fae5; color: #065f46; padding: 15px; border-radius: 8px; margin-top: 15px; display: none; border-left: 4px solid #10b981; }
+        .error-message { background: #fee2e2; color: #991b1b; padding: 10px 15px; border-radius: 8px; margin-top: 10px; display: none; border-left: 4px solid #ef4444; font-size: 14px; }
+        .start-screen { padding: 40px; text-align: center; }
+        .start-screen h2 { color: #3730a3; font-size: 28px; margin-bottom: 20px; }
+        .start-screen ul { text-align: left; max-width: 600px; margin: 20px auto; color: #4a5568; font-size: 16px; line-height: 2; }
+        .start-screen li { margin-bottom: 10px; }
+        .start-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 20px 50px; font-size: 20px; border-radius: 12px; cursor: pointer; margin-top: 30px; font-weight: 600; transition: transform 0.3s, box-shadow 0.3s; }
+        .start-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); }
+        @media (max-width: 768px) { .timer { position: static; margin: 20px auto; width: fit-content; } .header h1 { font-size: 24px; } .content { padding: 20px; } .question { padding: 15px; } .module-section { padding: 15px; } .module-header { margin: -15px -15px 15px -15px; font-size: 18px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Simulazione Esame EIPASS 7 Moduli User</h1>
+            <p>Certificazione Informatica Europea</p>
+        </div>
+        
+        <div class="exam-info">
+            <div class="exam-info-grid">
+                <div class="info-item">
+                    <div class="info-label">Domande Totali</div>
+                    <div class="info-value">56</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Moduli</div>
+                    <div class="info-value">7</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Tempo Totale</div>
+                    <div class="info-value">90 min</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Per Superare</div>
+                    <div class="info-value">75%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timer" id="timer" style="display: none;">
+            <div class="timer-label">⏱️ TEMPO RIMANENTE</div>
+            <div class="timer-value" id="timerValue">90:00</div>
+        </div>
+
+        <div class="start-screen" id="startScreen">
+            <h2>📋 Istruzioni Esame EIPASS 7 Moduli</h2>
+            <ul>
+                <li>✅ <strong>56 domande totali</strong> (8 domande per ciascuno dei 7 moduli)</li>
+                <li>⏱️ <strong>90 minuti</strong> di tempo complessivo</li>
+                <li>📚 <strong>7 Moduli</strong>: Word, Excel, PowerPoint, Internet, Sicurezza IT, Gestione File, Collaborazione Online</li>
+                <li>🎯 Necessario <strong>75%</strong> di risposte corrette per superare (42/56)</li>
+                <li>⚠️ Il timer si avvia automaticamente quando inizi</li>
+                <li>💾 Risultati salvati automaticamente al termine</li>
+                <li>📄 Validità certificazione: <strong>4 anni</strong></li>
+            </ul>
+            
+            <div class="user-info" style="margin-top: 30px;">
+                <h3>👤 Dati Candidato</h3>
+                <div class="form-group">
+                    <label for="userName">Nome e Cognome *</label>
+                    <input type="text" id="userName" placeholder="Inserisci nome e cognome" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email (facoltativa)</label>
+                    <input type="email" id="userEmail" placeholder="Inserisci la tua email">
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="anonymous">
+                    <label for="anonymous">Preferisco rimanere anonimo</label>
+                </div>
+                <div class="error-message" id="userError">⚠️ Inserisci il tuo nome o seleziona "Preferisco rimanere anonimo"</div>
+            </div>
+
+            <button class="start-btn" onclick="startExam()">🚀 INIZIA ESAME</button>
+        </div>
+
+        <div class="content" id="examContent" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="question-counter" id="questionCounter"></div>
+            
+            <form id="quizForm"></form>
+            
+            <button type="button" class="submit-btn" id="submitBtn" onclick="submitExam()">📤 CONSEGNA ESAME</button>
+            
+            <div class="result" id="result">
+                <h2>📊 Risultato Esame EIPASS</h2>
+                <div class="result-status" id="resultStatus"></div>
+                <div class="result-message" id="resultMessage"></div>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Punteggio</div>
+                        <div class="result-value" id="score"></div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Percentuale</div>
+                        <div class="result-value" id="percentage"></div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Tempo Impiegato</div>
+                        <div class="result-value" id="timeUsed"></div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Risposte Corrette</div>
+                        <div class="result-value" id="correctCount"></div>
+                    </div>
+                </div>
+                <div class="success-message" id="successMessage">✅ I tuoi risultati sono stati salvati correttamente!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxk68lInI6kObsveIAq_9DP2Kf2ul0UfTvdsi162Uag5zCxekkkM0Hc3s3ucxIdAg/exec';
+        const EXAM_DURATION = 90 * 60; // 90 minuti in secondi
+        let timeRemaining = EXAM_DURATION;
+        let timerInterval;
+        let startTime;
+        
+        const modules = [
+            {
+                name: "📝 MODULO 1 - Word Processing",
+                questions: [
+                    { text: "Come si applica il grassetto in Word?", answers: ["Ctrl+B o Home > Grassetto", "Ctrl+G", "Alt+B", "Shift+B"], correct: 0 },
+                    { text: "Come si inserisce un'interruzione di pagina?", answers: ["Ctrl+Enter", "Ctrl+P", "Alt+Enter", "Shift+Enter"], correct: 0 },
+                    { text: "Come si crea un elenco puntato?", answers: ["Home > Elenchi puntati", "File > Elenco", "Ctrl+L", "Alt+L"], correct: 0 },
+                    { text: "Come si inserisce un'intestazione?", answers: ["Inserisci > Intestazione", "Home > Intestazione", "File > Intestazione", "Layout > Intestazione"], correct: 0 },
+                    { text: "Ctrl+Z serve per:", answers: ["Annullare l'ultima operazione", "Salvare", "Copiare", "Incollare"], correct: 0 },
+                    { text: "Come si allinea il testo al centro?", answers: ["Ctrl+E o Home > Allinea al centro", "Ctrl+C", "Ctrl+T", "Ctrl+M"], correct: 0 },
+                    { text: "Come si inserisce un numero di pagina?", answers: ["Inserisci > Numero di pagina", "Home > Numero", "File > Pagina", "Layout > Numero"], correct: 0 },
+                    { text: "Quale estensione ha un documento Word?", answers: [".docx", ".xlsx", ".pptx", ".txt"], correct: 0 }
+                ]
+            },
+            {
+                name: "📊 MODULO 2 - Spreadsheets (Excel)",
+                questions: [
+                    { text: "Con quale simbolo iniziano le formule?", answers: ["=", "+", "#", "@"], correct: 0 },
+                    { text: "Cosa fa la funzione SOMMA?", answers: ["Calcola la somma di celle", "Calcola la media", "Conta le celle", "Trova il massimo"], correct: 0 },
+                    { text: "Come si crea un riferimento assoluto?", answers: ["Con $A$1", "Con &A1", "Con #A1", "Con @A1"], correct: 0 },
+                    { text: "Cosa significa #DIV/0!?", answers: ["Divisione per zero", "Nome errato", "Riferimento invalido", "Cella vuota"], correct: 0 },
+                    { text: "Come si inserisce un grafico?", answers: ["Inserisci > Grafici", "Home > Grafico", "File > Grafico", "Layout > Grafico"], correct: 0 },
+                    { text: "Cosa fa la funzione MEDIA?", answers: ["Calcola la media aritmetica", "Somma i valori", "Conta i numeri", "Trova il minimo"], correct: 0 },
+                    { text: "Come si blocca la prima riga?", answers: ["Visualizza > Blocca riquadri > Blocca riga superiore", "Home > Blocca", "File > Blocca", "Layout > Blocca"], correct: 0 },
+                    { text: "Quale estensione ha un file Excel?", answers: [".xlsx", ".docx", ".pptx", ".txt"], correct: 0 }
+                ]
+            },
+            {
+                name: "🎨 MODULO 3 - Presentations (PowerPoint)",
+                questions: [
+                    { text: "Come si chiamano le pagine di PowerPoint?", answers: ["Diapositive (slides)", "Fogli", "Pagine", "Schede"], correct: 0 },
+                    { text: "Come si aggiunge una nuova diapositiva?", answers: ["Home > Nuova diapositiva o Ctrl+M", "File > Nuova", "Ctrl+N", "Alt+N"], correct: 0 },
+                    { text: "Cosa sono le transizioni?", answers: ["Effetti tra diapositive", "Effetti sugli oggetti", "Temi grafici", "Layout"], correct: 0 },
+                    { text: "Come si avvia la presentazione?", answers: ["F5 o Presentazione > Dall'inizio", "F1", "Ctrl+P", "Enter"], correct: 0 },
+                    { text: "Come si inserisce un'immagine?", answers: ["Inserisci > Immagini", "Home > Immagine", "File > Immagine", "Layout > Immagine"], correct: 0 },
+                    { text: "Si possono nascondere diapositive?", answers: ["Sì, clic destro > Nascondi diapositiva", "No, vanno eliminate", "Solo in modifica", "Solo stampando"], correct: 0 },
+                    { text: "Come si cambia il layout di una diapositiva?", answers: ["Home > Layout", "File > Layout", "Inserisci > Layout", "Visualizza > Layout"], correct: 0 },
+                    { text: "Quale estensione ha un file PowerPoint?", answers: [".pptx", ".docx", ".xlsx", ".pdf"], correct: 0 }
+                ]
+            },
+            {
+                name: "🌐 MODULO 4 - Internet & Web Browsing",
+                questions: [
+                    { text: "Cosa significa URL?", answers: ["Uniform Resource Locator", "Universal Resource Link", "Unique Resource Location", "United Reference Link"], correct: 0 },
+                    { text: "Quale protocollo indica una connessione sicura?", answers: ["HTTPS", "HTTP", "FTP", "SMTP"], correct: 0 },
+                    { text: "Cosa indica il lucchetto nella barra indirizzi?", answers: ["Connessione sicura e criptata", "Sito veloce", "Sito popolare", "Sito gratuito"], correct: 0 },
+                    { text: "Cosa sono i cookie?", answers: ["File che memorizzano info sulla navigazione", "Virus", "Email spam", "Antivirus"], correct: 0 },
+                    { text: "Qual è la funzione di un motore di ricerca?", answers: ["Trovare informazioni sul web", "Inviare email", "Creare documenti", "Salvare file"], correct: 0 },
+                    { text: "Cosa significa 'navigazione in incognito'?", answers: ["Non salva cronologia e cookie localmente", "Completamente anonima", "Più veloce", "Senza internet"], correct: 0 },
+                    { text: "Cosa sono i preferiti/segnalibri?", answers: ["Elenco di siti salvati per accesso rapido", "File scaricati", "Email importanti", "Password salvate"], correct: 0 },
+                    { text: "Ctrl+F in un browser serve per:", answers: ["Cercare testo nella pagina", "Salvare la pagina", "Aggiornare", "Stampare"], correct: 0 }
+                ]
+            },
+            {
+                name: "🔒 MODULO 5 - IT Security",
+                questions: [
+                    { text: "Cosa rende sicura una password?", answers: ["Lunghezza, maiuscole, minuscole, numeri, simboli", "Solo numeri", "Solo lettere", "Nome e cognome"], correct: 0 },
+                    { text: "Cos'è il phishing?", answers: ["Tentativo di rubare dati tramite email false", "Un virus", "Un antivirus", "Un backup"], correct: 0 },
+                    { text: "Quanto spesso fare backup dei dati importanti?", answers: ["Regolarmente (settimanale/mensile)", "Mai", "Una volta sola", "Ogni 5 anni"], correct: 0 },
+                    { text: "Cos'è un firewall?", answers: ["Sistema che protegge da accessi non autorizzati", "Un virus", "Un browser", "Un programma Office"], correct: 0 },
+                    { text: "Cosa fare con un'email sospetta?", answers: ["Non aprirla ed eliminarla", "Aprire tutti gli allegati", "Rispondere subito", "Inoltrare a tutti"], correct: 0 },
+                    { text: "Cos'è un malware?", answers: ["Software dannoso (virus, trojan, spyware)", "Antivirus", "Sistema operativo", "Browser"], correct: 0 },
+                    { text: "Cosa sono gli aggiornamenti di sicurezza?", answers: ["Patch che correggono vulnerabilità", "Nuove funzioni", "Pubblicità", "Virus"], correct: 0 },
+                    { text: "Cos'è l'autenticazione a due fattori (2FA)?", answers: ["Doppia verifica (password + codice)", "Due password", "Due account", "Due computer"], correct: 0 }
+                ]
+            },
+            {
+                name: "📁 MODULO 6 - Gestione File",
+                questions: [
+                    { text: "Ctrl+C e Ctrl+V servono per:", answers: ["Copiare e incollare", "Tagliare e incollare", "Salvare", "Stampare"], correct: 0 },
+                    { text: "Ctrl+X serve per:", answers: ["Tagliare", "Copiare", "Incollare", "Eliminare"], correct: 0 },
+                    { text: "Cosa significa 'salvare con nome'?", answers: ["Creare copia con nome/posizione diversi", "Rinominare il file", "Eliminare il file", "Copiare il file"], correct: 0 },
+                    { text: "Cosa significa comprimere un file (ZIP)?", answers: ["Ridurre dimensioni per condivisione", "Eliminare il file", "Crittografare", "Rinominare"], correct: 0 },
+                    { text: "Cosa indica l'estensione .pdf?", answers: ["Portable Document Format", "PowerPoint Document File", "Personal Data File", "Protected Document Format"], correct: 0 },
+                    { text: "Come si crea una nuova cartella in Windows?", answers: ["Ctrl+Shift+N o clic destro > Nuova cartella", "Ctrl+N", "Alt+F", "Shift+F"], correct: 0 },
+                    { text: "Cosa sono i metadati di un file?", answers: ["Informazioni sul file (autore, data, dimensione)", "Il contenuto", "Il nome", "L'icona"], correct: 0 },
+                    { text: "Cosa significa 'percorso assoluto'?", answers: ["Posizione completa dalla radice (es. C:\\Users\\Doc)", "Nome del file", "Estensione", "Icona"], correct: 0 }
+                ]
+            },
+            {
+                name: "🤝 MODULO 7 - Collaborazione Online",
+                questions: [
+                    { text: "Cos'è il cloud storage?", answers: ["Archiviazione online su server remoti", "Memoria RAM", "Hard disk esterno", "CD/DVD"], correct: 0 },
+                    { text: "Esempi di cloud storage sono:", answers: ["Google Drive, OneDrive, Dropbox", "Word, Excel, PowerPoint", "Windows, Linux, MacOS", "Chrome, Firefox, Edge"], correct: 0 },
+                    { text: "Cos'è la condivisione di file cloud?", answers: ["Permettere ad altri di accedere ai file online", "Copiare file su USB", "Inviare email", "Stampare"], correct: 0 },
+                    { text: "Cosa sono Google Docs/Office Online?", answers: ["Applicazioni Office nel browser", "Software da installare", "Sistemi operativi", "Antivirus"], correct: 0 },
+                    { text: "Cos'è una videoconferenza?", answers: ["Riunione audio/video online", "Email", "Chat testuale", "Telefonata"], correct: 0 },
+                    { text: "Esempi di strumenti videoconferenza:", answers: ["Zoom, Teams, Meet, Skype", "Word, Excel, PowerPoint", "Windows, Linux, MacOS", "Chrome, Firefox, Edge"], correct: 0 },
+                    { text: "Cos'è il lavoro collaborativo su documenti?", answers: ["Più persone modificano lo stesso file simultaneamente", "Ognuno lavora su copie separate", "Solo una persona può modificare", "Si lavora offline"], correct: 0 },
+                    { text: "Cos'è un calendario condiviso?", answers: ["Calendario visibile e modificabile da più persone", "Calendario personale privato", "Promemoria", "Sveglia"], correct: 0 }
+                ]
+            }
+        ];
+
+        const answers = [];
+        modules.forEach(module => {
+            module.questions.forEach(q => answers.push(q.correct));
+        });
+
+        document.getElementById('anonymous').addEventListener('change', function() {
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+            if (this.checked) {
+                userName.value = 'Anonimo';
+                userName.disabled = true;
+                userEmail.disabled = true;
+            } else {
+                userName.value = '';
+                userName.disabled = false;
+                userEmail.disabled = false;
+            }
+        });
+
+        function startExam() {
+            const userName = document.getElementById('userName').value.trim();
+            const isAnonymous = document.getElementById('anonymous').checked;
+            const userError = document.getElementById('userError');
+            
+            if (!userName && !isAnonymous) {
+                userError.style.display = 'block';
+                return;
+            }
+            userError.style.display = 'none';
+            
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('examContent').style.display = 'block';
+            document.getElementById('timer').style.display = 'block';
+            
+            loadQuestions();
+            startTimer();
+            updateProgress();
+        }
+
+        function loadQuestions() {
+            const form = document.getElementById('quizForm');
+            let questionNumber = 0;
+            
+            modules.forEach((module, moduleIndex) => {
+                const moduleSection = document.createElement('div');
+                moduleSection.className = 'module-section';
+                
+                const moduleHeader = document.createElement('div');
+                moduleHeader.className = 'module-header';
+                moduleHeader.textContent = module.name;
+                moduleSection.appendChild(moduleHeader);
+                
+                module.questions.forEach((q, qIndex) => {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.innerHTML = `
+                        <div class="question-text">
+                            <span class="question-number">${questionNumber + 1}.</span>${q.text}
+                        </div>
+                        <div class="options">
+                            ${q.answers.map((answer, i) => `
+                                <div class="option">
+                                    <input type="radio" name="q${questionNumber}" value="${i}" id="q${questionNumber}_${i}">
+                                    <label for="q${questionNumber}_${i}">${answer}</label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    moduleSection.appendChild(questionDiv);
+                    questionNumber++;
+                });
+                
+                form.appendChild(moduleSection);
+            });
+            
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', updateProgress);
+            });
+        }
+
+        function updateProgress() {
+            let answered = 0;
+            const totalQuestions = 56;
+            for (let i = 0; i < totalQuestions; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) {
+                    answered++;
+                }
+            }
+            const percentage = (answered / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('questionCounter').textContent = `Domande completate: ${answered}/${totalQuestions}`;
+        }
+
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                    alert('⏰ Tempo scaduto! L\'esame è stato consegnato automaticamente.');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const timerValue = document.getElementById('timerValue');
+            const timer = document.getElementById('timer');
+            
+            timerValue.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            timer.classList.remove('warning', 'danger');
+            if (timeRemaining <= 300) {
+                timer.classList.add('danger');
+            } else if (timeRemaining <= 900) {
+                timer.classList.add('warning');
+            }
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            
+            const userName = document.getElementById('userName').value.trim() || 'Anonimo';
+            const userEmail = document.getElementById('userEmail').value.trim() || 'Non fornita';
+            
+            let score = 0;
+            let userAnswers = [];
+            
+            for (let i = 0; i < 56; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const correctAnswer = answers[i];
+                
+                if (selected) {
+                    userAnswers.push(`q${i + 1}=${selected.value}`);
+                    if (parseInt(selected.value) === correctAnswer) {
+                        score++;
+                        selected.parentElement.classList.add('correct');
+                    } else {
+                        selected.parentElement.classList.add('incorrect');
+                        document.getElementById(`q${i}_${correctAnswer}`).parentElement.classList.add('correct');
+                    }
+                } else {
+                    userAnswers.push(`q${i + 1}=non_risposta`);
+                    document.getElementById(`q${i}_${correctAnswer}`).parentElement.classList.add('correct');
+                }
+            }
+            
+            const totalQuestions = 56;
+            const percentage = Math.round((score / totalQuestions) * 100);
+            const passed = percentage >= 75;
+            const timeUsedSeconds = EXAM_DURATION - timeRemaining;
+            const timeUsedMinutes = Math.floor(timeUsedSeconds / 60);
+            
+            document.getElementById('score').textContent = `${score}/${totalQuestions}`;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            document.getElementById('timeUsed').textContent = `${timeUsedMinutes} min`;
+            document.getElementById('correctCount').textContent = `${score}`;
+            
+            const resultStatus = document.getElementById('resultStatus');
+            const resultMessage = document.getElementById('resultMessage');
+            
+            if (passed) {
+                resultStatus.textContent = '✅ SUPERATO';
+                resultStatus.className = 'result-status passed';
+                resultMessage.textContent = 'Congratulazioni! Hai superato l\'esame EIPASS 7 Moduli User! Certificazione valida 4 anni.';
+            } else {
+                resultStatus.textContent = '❌ NON SUPERATO';
+                resultStatus.className = 'result-status failed';
+                resultMessage.textContent = `Non hai raggiunto il 75% (minimo 42/56). Hai ottenuto ${score}/56. Riprova!`;
+            }
+            
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').textContent = 'Esame Consegnato';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nome: userName,
+                    email: userEmail,
+                    test: 'Simulazione Esame EIPASS 7 Moduli User (56 domande)',
+                    punteggio: `${score}/${totalQuestions}`,
+                    percentuale: percentage,
+                    risposte: userAnswers.join(', '),
+                    tempo_impiegato: `${timeUsedMinutes} minuti`,
+                    esito: passed ? 'SUPERATO ✅' : 'NON SUPERATO ❌'
+                })
+            }).then(() => {
+                document.getElementById('successMessage').style.display = 'block';
+            }).catch(() => {
+                document.getElementById('successMessage').style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>

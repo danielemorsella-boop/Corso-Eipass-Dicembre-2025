@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test EIPASS - Capitolo 1: Primi passi con Word</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #764ba2;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .option label {
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: transform 0.3s;
+        }
+        
+        .submit-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .result {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result h2 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .correct {
+            border-color: #4caf50 !important;
+            background-color: #e8f5e9 !important;
+        }
+        
+        .incorrect {
+            border-color: #f44336 !important;
+            background-color: #ffebee !important;
+        }
+        
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #764ba2;
+            margin: 15px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Test EIPASS - Capitolo 1</h1>
+        <p class="subtitle">Primi passi con Word</p>
+        
+        <form id="quizForm">
+            <!-- Domanda 1 -->
+            <div class="question">
+                <h3>1. Qual è l'estensione predefinita dei file di Word dalla versione 2007 in poi?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q1a" name="q1" value="a">
+                        <label for="q1a">.doc</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1b" name="q1" value="b">
+                        <label for="q1b">.docx</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1c" name="q1" value="c">
+                        <label for="q1c">.txt</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1d" name="q1" value="d">
+                        <label for="q1d">.rtf</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 2 -->
+            <div class="question">
+                <h3>2. Dove si trova il pulsante per salvare rapidamente un documento in Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q2a" name="q2" value="a">
+                        <label for="q2a">Nella barra di stato</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2b" name="q2" value="b">
+                        <label for="q2b">Nella barra di accesso rapido</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2c" name="q2" value="c">
+                        <label for="q2c">Nella barra multifunzione</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2d" name="q2" value="d">
+                        <label for="q2d">Nel menu di Windows</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 3 -->
+            <div class="question">
+                <h3>3. Quale scheda della barra multifunzione contiene i comandi per formattare il testo?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q3a" name="q3" value="a">
+                        <label for="q3a">Inserisci</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3b" name="q3" value="b">
+                        <label for="q3b">Home</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3c" name="q3" value="c">
+                        <label for="q3c">Layout</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3d" name="q3" value="d">
+                        <label for="q3d">Visualizza</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 4 -->
+            <div class="question">
+                <h3>4. Qual è la modalità di visualizzazione predefinita di Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q4a" name="q4" value="a">
+                        <label for="q4a">Modalità di lettura</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4b" name="q4" value="b">
+                        <label for="q4b">Layout di stampa</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4c" name="q4" value="c">
+                        <label for="q4c">Layout Web</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4d" name="q4" value="d">
+                        <label for="q4d">Bozza</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 5 -->
+            <div class="question">
+                <h3>5. Quali sono i margini predefiniti (superiore, inferiore, destro, sinistro) di un documento Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q5a" name="q5" value="a">
+                        <label for="q5a">Tutti 2,5 cm</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5b" name="q5" value="b">
+                        <label for="q5b">Superiore 2,5 cm, gli altri 2 cm</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5c" name="q5" value="c">
+                        <label for="q5c">Tutti 3 cm</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5d" name="q5" value="d">
+                        <label for="q5d">Tutti 1,5 cm</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 6 -->
+            <div class="question">
+                <h3>6. Come si attiva lo zoom al 100% in Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q6a" name="q6" value="a">
+                        <label for="q6a">Dalla scheda File</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6b" name="q6" value="b">
+                        <label for="q6b">Dal pulsante 100% nella scheda Visualizza</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6c" name="q6" value="c">
+                        <label for="q6c">Dalla barra dei menu</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6d" name="q6" value="d">
+                        <label for="q6d">Non è possibile</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 7 -->
+            <div class="question">
+                <h3>7. Quale combinazione di tasti permette di visualizzare la prima pagina del documento?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q7a" name="q7" value="a">
+                        <label for="q7a">Ctrl + Fine</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7b" name="q7" value="b">
+                        <label for="q7b">Ctrl + Home</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7c" name="q7" value="c">
+                        <label for="q7c">Ctrl + Inizio</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7d" name="q7" value="d">
+                        <label for="q7d">Alt + Home</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 8 -->
+            <div class="question">
+                <h3>8. Quale formato di pagina è predefinito in Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q8a" name="q8" value="a">
+                        <label for="q8a">A3</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8b" name="q8" value="b">
+                        <label for="q8b">A4</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8c" name="q8" value="c">
+                        <label for="q8c">A5</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8d" name="q8" value="d">
+                        <label for="q8d">Letter</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 9 -->
+            <div class="question">
+                <h3>9. Come si inserisce un'interruzione di pagina in Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q9a" name="q9" value="a">
+                        <label for="q9a">Ctrl + Enter</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9b" name="q9" value="b">
+                        <label for="q9b">Ctrl + Shift</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9c" name="q9" value="c">
+                        <label for="q9c">Alt + Enter</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9d" name="q9" value="d">
+                        <label for="q9d">Shift + Enter</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 10 -->
+            <div class="question">
+                <h3>10. Dove si trova il comando per inserire l'intestazione e il piè di pagina?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q10a" name="q10" value="a">
+                        <label for="q10a">Scheda Home</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10b" name="q10" value="b">
+                        <label for="q10b">Scheda Inserisci</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10c" name="q10" value="c">
+                        <label for="q10c">Scheda Layout</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10d" name="q10" value="d">
+                        <label for="q10d">Scheda Visualizza</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 11 -->
+            <div class="question">
+                <h3>11. Qual è la combinazione di tasti per spostarsi all'ultima pagina del documento?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q11a" name="q11" value="a">
+                        <label for="q11a">Ctrl + End</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11b" name="q11" value="b">
+                        <label for="q11b">Ctrl + Fine</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11c" name="q11" value="c">
+                        <label for="q11c">Alt + Fine</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11d" name="q11" value="d">
+                        <label for="q11d">Shift + Fine</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 12 -->
+            <div class="question">
+                <h3>12. Cosa visualizza la barra di stato di Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q12a" name="q12" value="a">
+                        <label for="q12a">Solo il numero di pagine</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12b" name="q12" value="b">
+                        <label for="q12b">Informazioni operative sul documento (numero pagina, parole, zoom, ecc.)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12c" name="q12" value="c">
+                        <label for="q12c">Solo lo zoom</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12d" name="q12" value="d">
+                        <label for="q12d">Il nome del file</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 13 -->
+            <div class="question">
+                <h3>13. Come si personalizza la barra di accesso rapido?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q13a" name="q13" value="a">
+                        <label for="q13a">Non si può personalizzare</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13b" name="q13" value="b">
+                        <label for="q13b">Tramite il pulsante "Personalizza Barra di accesso rapido"</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13c" name="q13" value="c">
+                        <label for="q13c">Solo dalle impostazioni di Windows</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13d" name="q13" value="d">
+                        <label for="q13d">Tramite la scheda File</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 14 -->
+            <div class="question">
+                <h3>14. Quale modalità di visualizzazione elimina ogni distrazione per concentrarsi sui contenuti?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q14a" name="q14" value="a">
+                        <label for="q14a">Bozza</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14b" name="q14" value="b">
+                        <label for="q14b">Modalità focus</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14c" name="q14" value="c">
+                        <label for="q14c">Layout Web</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14d" name="q14" value="d">
+                        <label for="q14d">Struttura</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 15 -->
+            <div class="question">
+                <h3>15. Che tipo di carattere è predefinito in Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q15a" name="q15" value="a">
+                        <label for="q15a">Arial</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15b" name="q15" value="b">
+                        <label for="q15b">Times New Roman</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15c" name="q15" value="c">
+                        <label for="q15c">Calibri</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15d" name="q15" value="d">
+                        <label for="q15d">Verdana</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 16 -->
+            <div class="question">
+                <h3>16. Qual è la dimensione predefinita del carattere in Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q16a" name="q16" value="a">
+                        <label for="q16a">10 pt</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16b" name="q16" value="b">
+                        <label for="q16b">11 pt</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16c" name="q16" value="c">
+                        <label for="q16c">12 pt</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q16d" name="q16" value="d">
+                        <label for="q16d">14 pt</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 17 -->
+            <div class="question">
+                <h3>17. Dove si trovano i modelli predefiniti di Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q17a" name="q17" value="a">
+                        <label for="q17a">Nella scheda Home</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17b" name="q17" value="b">
+                        <label for="q17b">Nella finestra iniziale di Word o in File > Nuovo</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17c" name="q17" value="c">
+                        <label for="q17c">Nella scheda Inserisci</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q17d" name="q17" value="d">
+                        <label for="q17d">Non esistono modelli predefiniti</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 18 -->
+            <div class="question">
+                <h3>18. Come si può modificare l'orientamento della pagina?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q18a" name="q18" value="a">
+                        <label for="q18a">Scheda Home > Orientamento</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18b" name="q18" value="b">
+                        <label for="q18b">Scheda Layout > Orientamento</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18c" name="q18" value="c">
+                        <label for="q18c">Scheda Inserisci > Orientamento</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q18d" name="q18" value="d">
+                        <label for="q18d">Non si può modificare</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 19 -->
+            <div class="question">
+                <h3>19. Qual è lo scopo della barra multifunzione?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q19a" name="q19" value="a">
+                        <label for="q19a">Mostrare solo i file recenti</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19b" name="q19" value="b">
+                        <label for="q19b">Racchiudere tutti i comandi di Word organizzati in schede e gruppi</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19c" name="q19" value="c">
+                        <label for="q19c">Visualizzare solo il testo</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q19d" name="q19" value="d">
+                        <label for="q19d">Sostituire la tastiera</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 20 -->
+            <div class="question">
+                <h3>20. Come si accede alle opzioni di Word per modificare le impostazioni predefinite?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q20a" name="q20" value="a">
+                        <label for="q20a">Scheda Home > Opzioni</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20b" name="q20" value="b">
+                        <label for="q20b">Scheda File > Opzioni</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20c" name="q20" value="c">
+                        <label for="q20c">Scheda Inserisci > Opzioni</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q20d" name="q20" value="d">
+                        <label for="q20d">Scheda Visualizza > Opzioni</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="submit-btn" onclick="calculateScore()">Verifica Risposte</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2>📊 Risultato del Test</h2>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill">0%</div>
+            </div>
+            <p class="score">Punteggio: <span id="score">0</span>/20</p>
+            <p id="feedback"></p>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'b',
+            q6: 'b',
+            q7: 'b',
+            q8: 'b',
+            q9: 'a',
+            q10: 'b',
+            q11: 'b',
+            q12: 'b',
+            q13: 'b',
+            q14: 'b',
+            q15: 'c',
+            q16: 'b',
+            q17: 'b',
+            q18: 'b',
+            q19: 'b',
+            q20: 'b'
+        };
+
+        function calculateScore() {
+            let score = 0;
+            const form = document.getElementById('quizForm');
+            const questions = document.querySelectorAll('.question');
+            
+            questions.forEach((question, index) => {
+                const questionNum = 'q' + (index + 1);
+                const selectedAnswer = form.elements[questionNum].value;
+                const options = question.querySelectorAll('.option');
+                
+                options.forEach(option => {
+                    option.classList.remove('correct', 'incorrect');
+                    const input = option.querySelector('input');
+                    
+                    if (input.value === correctAnswers[questionNum]) {
+                        option.classList.add('correct');
+                    } else if (input.checked && input.value !== correctAnswers[questionNum]) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (selectedAnswer === correctAnswers[questionNum]) {
+                    score++;
+                }
+            });
+            
+            const percentage = (score / 20) * 100;
+            document.getElementById('score').textContent = score;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFill').textContent = Math.round(percentage) + '%';
+            
+            let feedback = '';
+            if (score >= 18) {
+                feedback = '🎉 Eccellente! Hai un\'ottima padronanza degli argomenti!';
+            } else if (score >= 15) {
+                feedback = '👍 Molto bene! Conosci bene la materia!';
+            } else if (score >= 12) {
+                feedback = '📚 Buono! Continua a studiare per migliorare!';
+            } else {
+                feedback = '💪 Devi ripassare ancora. Non mollare!';
+            }
+            
+            document.getElementById('feedback').textContent = feedback;
+            document.getElementById('result').classList.add('show');
+            
+            window.scrollTo({
+                top: document.getElementById('result').offsetTop - 20,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>

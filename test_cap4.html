@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test EIPASS - Capitolo 4: Salvare e stampare il documento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #fa709a;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #fa709a;
+        }
+        
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            border-color: #fa709a;
+            transform: translateX(5px);
+        }
+        
+        .option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .option label {
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: transform 0.3s;
+        }
+        
+        .submit-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .result {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result h2 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        
+        .correct {
+            border-color: #4caf50 !important;
+            background-color: #e8f5e9 !important;
+        }
+        
+        .incorrect {
+            border-color: #f44336 !important;
+            background-color: #ffebee !important;
+        }
+        
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fa709a;
+            margin: 15px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💾 Test EIPASS - Capitolo 4</h1>
+        <p class="subtitle">Salvare e stampare il documento</p>
+        
+        <form id="quizForm">
+            <!-- Domanda 1 -->
+            <div class="question">
+                <h3>1. Come si salva un documento per la prima volta in Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q1a" name="q1" value="a">
+                        <label for="q1a">Scheda Home > Salva</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1b" name="q1" value="b">
+                        <label for="q1b">Scheda File > Salva con nome</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1c" name="q1" value="c">
+                        <label for="q1c">Scheda Inserisci > Salva</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q1d" name="q1" value="d">
+                        <label for="q1d">Scheda Layout > Salva</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 2 -->
+            <div class="question">
+                <h3>2. Qual è il formato predefinito dei file di Word dalla versione 2007?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q2a" name="q2" value="a">
+                        <label for="q2a">.doc</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2b" name="q2" value="b">
+                        <label for="q2b">.docx</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2c" name="q2" value="c">
+                        <label for="q2c">.rtf</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q2d" name="q2" value="d">
+                        <label for="q2d">.pdf</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 3 -->
+            <div class="question">
+                <h3>3. Cos'è OneDrive?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q3a" name="q3" value="a">
+                        <label for="q3a">Un disco esterno</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3b" name="q3" value="b">
+                        <label for="q3b">Lo spazio di archiviazione online di Microsoft</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3c" name="q3" value="c">
+                        <label for="q3c">Un programma di Word</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q3d" name="q3" value="d">
+                        <label for="q3d">Una stampante</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 4 -->
+            <div class="question">
+                <h3>4. Come si esegue il controllo ortografico in Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q4a" name="q4" value="a">
+                        <label for="q4a">Scheda Home > Controllo</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4b" name="q4" value="b">
+                        <label for="q4b">Scheda Revisione > Strumenti di correzione > Controlla documento</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4c" name="q4" value="c">
+                        <label for="q4c">Scheda Inserisci > Controllo</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q4d" name="q4" value="d">
+                        <label for="q4d">Non esiste questa funzione</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 5 -->
+            <div class="question">
+                <h3>5. Quale linea usa Word per segnalare gli errori ortografici?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q5a" name="q5" value="a">
+                        <label for="q5a">Linea ondulata blu</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5b" name="q5" value="b">
+                        <label for="q5b">Linea ondulata rossa</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5c" name="q5" value="c">
+                        <label for="q5c">Linea ondulata verde</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q5d" name="q5" value="d">
+                        <label for="q5d">Sottolineatura nera</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 6 -->
+            <div class="question">
+                <h3>6. Come si visualizza l'anteprima di stampa?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q6a" name="q6" value="a">
+                        <label for="q6a">Scheda Home > Anteprima</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6b" name="q6" value="b">
+                        <label for="q6b">Scheda File > Stampa (mostra automaticamente l'anteprima)</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6c" name="q6" value="c">
+                        <label for="q6c">Scheda Inserisci > Anteprima</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q6d" name="q6" value="d">
+                        <label for="q6d">Non esiste l'anteprima</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 7 -->
+            <div class="question">
+                <h3>7. Qual è l'estensione del formato PDF?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q7a" name="q7" value="a">
+                        <label for="q7a">.pfd</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7b" name="q7" value="b">
+                        <label for="q7b">.pdf</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7c" name="q7" value="c">
+                        <label for="q7c">.pdt</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q7d" name="q7" value="d">
+                        <label for="q7d">.doc</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 8 -->
+            <div class="question">
+                <h3>8. Come si esporta rapidamente un documento in PDF?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q8a" name="q8" value="a">
+                        <label for="q8a">Scheda Home > PDF</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8b" name="q8" value="b">
+                        <label for="q8b">Scheda File > Esporta > Crea PDF/XPS</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8c" name="q8" value="c">
+                        <label for="q8c">Scheda Inserisci > PDF</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q8d" name="q8" value="d">
+                        <label for="q8d">Non si può fare</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 9 -->
+            <div class="question">
+                <h3>9. Cosa bisogna fare per salvare un documento su OneDrive?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q9a" name="q9" value="a">
+                        <label for="q9a">Niente, si salva automaticamente</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9b" name="q9" value="b">
+                        <label for="q9b">Accedere con un account Microsoft</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9c" name="q9" value="c">
+                        <label for="q9c">Acquistare una licenza speciale</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q9d" name="q9" value="d">
+                        <label for="q9d">Non è possibile</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 10 -->
+            <div class="question">
+                <h3>10. Qual è il formato compatibile con versioni di Word precedenti al 2007?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q10a" name="q10" value="a">
+                        <label for="q10a">.docx</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10b" name="q10" value="b">
+                        <label for="q10b">.doc</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10c" name="q10" value="c">
+                        <label for="q10c">.pdf</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q10d" name="q10" value="d">
+                        <label for="q10d">.odt</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 11 -->
+            <div class="question">
+                <h3>11. Come si apre un documento salvato in precedenza?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q11a" name="q11" value="a">
+                        <label for="q11a">Scheda Home > Apri</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11b" name="q11" value="b">
+                        <label for="q11b">Scheda File > Apri</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11c" name="q11" value="c">
+                        <label for="q11c">Scheda Inserisci > Apri</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q11d" name="q11" value="d">
+                        <label for="q11d">Scheda Layout > Apri</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 12 -->
+            <div class="question">
+                <h3>12. Qual è il formato ODT?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q12a" name="q12" value="a">
+                        <label for="q12a">Un formato Microsoft</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12b" name="q12" value="b">
+                        <label for="q12b">Il formato predefinito di LibreOffice, universale e open source</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12c" name="q12" value="c">
+                        <label for="q12c">Un formato per le immagini</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q12d" name="q12" value="d">
+                        <label for="q12d">Un formato obsoleto</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 13 -->
+            <div class="question">
+                <h3>13. Cosa permette di fare il salvataggio automatico in Word?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q13a" name="q13" value="a">
+                        <label for="q13a">Stampa automaticamente</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13b" name="q13" value="b">
+                        <label for="q13b">Salva automaticamente il documento su OneDrive mentre si lavora</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13c" name="q13" value="c">
+                        <label for="q13c">Chiude automaticamente il documento</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q13d" name="q13" value="d">
+                        <label for="q13d">Elimina automaticamente i file vecchi</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 14 -->
+            <div class="question">
+                <h3>14. Quale linea usa Word per segnalare gli errori grammaticali?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q14a" name="q14" value="a">
+                        <label for="q14a">Linea ondulata rossa</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14b" name="q14" value="b">
+                        <label for="q14b">Doppia linea blu</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14c" name="q14" value="c">
+                        <label for="q14c">Linea ondulata verde</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q14d" name="q14" value="d">
+                        <label for="q14d">Sottolineatura gialla</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Domanda 15 -->
+            <div class="question">
+                <h3>15. Cos'è la stampa unione?</h3>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" id="q15a" name="q15" value="a">
+                        <label for="q15a">Stampare più copie dello stesso documento</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15b" name="q15" value="b">
+                        <label for="q15b">Creare documenti personalizzati combinando un documento base con dati variabili</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15c" name="q15" value="c">
+                        <label for="q15c">Unire più documenti in uno</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" id="q15d" name="q15" value="d">
+                        <label for="q15d">Stampare fronte-retro</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="submit-btn" onclick="calculateScore()">Verifica Risposte</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2>📊 Risultato del Test</h2>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill">0%</div>
+            </div>
+            <p class="score">Punteggio: <span id="score">0</span>/15</p>
+            <p id="feedback"></p>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'b',
+            q2: 'b',
+            q3: 'b',
+            q4: 'b',
+            q5: 'b',
+            q6: 'b',
+            q7: 'b',
+            q8: 'b',
+            q9: 'b',
+            q10: 'b',
+            q11: 'b',
+            q12: 'b',
+            q13: 'b',
+            q14: 'b',
+            q15: 'b'
+        };
+
+        function calculateScore() {
+            let score = 0;
+            const form = document.getElementById('quizForm');
+            const questions = document.querySelectorAll('.question');
+            
+            questions.forEach((question, index) => {
+                const questionNum = 'q' + (index + 1);
+                const selectedAnswer = form.elements[questionNum].value;
+                const options = question.querySelectorAll('.option');
+                
+                options.forEach(option => {
+                    option.classList.remove('correct', 'incorrect');
+                    const input = option.querySelector('input');
+                    
+                    if (input.value === correctAnswers[questionNum]) {
+                        option.classList.add('correct');
+                    } else if (input.checked && input.value !== correctAnswers[questionNum]) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (selectedAnswer === correctAnswers[questionNum]) {
+                    score++;
+                }
+            });
+            
+            const percentage = (score / 15) * 100;
+            document.getElementById('score').textContent = score;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFill').textContent = Math.round(percentage) + '%';
+            
+            let feedback = '';
+            if (score >= 14) {
+                feedback = '🎉 Eccellente! Hai un\'ottima padronanza degli argomenti!';
+            } else if (score >= 12) {
+                feedback = '👍 Molto bene! Conosci bene la materia!';
+            } else if (score >= 10) {
+                feedback = '📚 Buono! Continua a studiare per migliorare!';
+            } else {
+                feedback = '💪 Devi ripassare ancora. Non mollare!';
+            }
+            
+            document.getElementById('feedback').textContent = feedback;
+            document.getElementById('result').classList.add('show');
+            
+            window.scrollTo({
+                top: document.getElementById('result').offsetTop - 20,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
