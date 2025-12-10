@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scenario Pratico Semplificato - EIPASS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+            min-height: 100vh; 
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
+            overflow: hidden;
+        }
+        .header { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+            color: white; 
+            padding: 40px; 
+            text-align: center; 
+        }
+        .header h1 { font-size: 32px; margin-bottom: 10px; }
+        .header p { font-size: 18px; opacity: 0.9; }
+        .badge { 
+            display: inline-block; 
+            background: #fbbf24; 
+            color: #78350f; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            font-size: 14px; 
+            font-weight: 700; 
+            margin-top: 15px;
+        }
+        .content { padding: 40px; }
+        
+        .scenario-intro { 
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); 
+            padding: 30px; 
+            border-radius: 15px; 
+            border-left: 5px solid #3b82f6; 
+            margin-bottom: 30px;
+        }
+        .scenario-intro h2 { color: #1e40af; margin-bottom: 15px; font-size: 24px; }
+        .scenario-intro p { color: #1e3a8a; line-height: 1.8; font-size: 16px; }
+        
+        .email-box { 
+            background: #fef3c7; 
+            border: 2px solid #f59e0b; 
+            border-radius: 12px; 
+            padding: 25px; 
+            margin: 20px 0;
+        }
+        .email-header { 
+            border-bottom: 2px solid #fde68a; 
+            padding-bottom: 15px; 
+            margin-bottom: 15px;
+        }
+        .email-field { margin: 8px 0; color: #92400e; }
+        .email-field strong { color: #78350f; }
+        .email-body { color: #92400e; line-height: 1.8; }
+        
+        .score-display { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+            color: white; 
+            padding: 25px; 
+            border-radius: 15px; 
+            text-align: center; 
+            margin: 30px 0;
+        }
+        .score-display h3 { font-size: 20px; margin-bottom: 10px; }
+        .score-value { font-size: 48px; font-weight: bold; margin: 10px 0; }
+        .score-max { font-size: 16px; opacity: 0.9; }
+        
+        .data-box { 
+            background: #fef3c7; 
+            border: 3px solid #f59e0b; 
+            border-radius: 12px; 
+            padding: 25px; 
+            margin: 20px 0;
+        }
+        .data-box h3 { color: #92400e; margin-bottom: 15px; font-size: 20px; }
+        .data-item { 
+            background: white; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+        }
+        .data-item strong { color: #92400e; }
+        
+        .task-section { 
+            background: #f0fdf4; 
+            border-radius: 15px; 
+            padding: 30px; 
+            margin: 25px 0;
+            border: 3px solid #10b981;
+        }
+        .task-section h3 { 
+            color: #047857; 
+            font-size: 24px; 
+            margin-bottom: 20px;
+        }
+        
+        .task-card { 
+            background: white; 
+            padding: 25px; 
+            margin: 20px 0; 
+            border-radius: 12px; 
+            border-left: 5px solid #10b981;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .task-card h4 { 
+            color: #047857; 
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        .task-points { 
+            display: inline-block; 
+            background: #10b981; 
+            color: white; 
+            padding: 6px 14px; 
+            border-radius: 15px; 
+            font-size: 14px; 
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .step-list { 
+            list-style: none; 
+            margin: 15px 0;
+        }
+        .step-list li { 
+            padding: 12px; 
+            margin: 8px 0;
+            background: #f0fdf4;
+            border-radius: 8px;
+            padding-left: 40px;
+            position: relative;
+        }
+        .step-list li:before { 
+            content: "✓"; 
+            position: absolute; 
+            left: 15px; 
+            color: #10b981; 
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .tip-box { 
+            background: #eff6ff; 
+            border-left: 4px solid #3b82f6; 
+            border-radius: 8px; 
+            padding: 15px; 
+            margin: 15px 0;
+        }
+        .tip-box strong { color: #1e40af; }
+        .tip-box p { color: #1e3a8a; line-height: 1.6; margin: 5px 0; }
+        
+        .checklist { 
+            background: #fef3c7; 
+            border: 2px solid #f59e0b; 
+            border-radius: 12px; 
+            padding: 25px; 
+            margin: 25px 0;
+        }
+        .checklist h3 { 
+            color: #92400e; 
+            margin-bottom: 15px; 
+            font-size: 20px;
+        }
+        .checklist-item { 
+            display: flex; 
+            align-items: center; 
+            padding: 12px; 
+            margin: 8px 0;
+            background: white;
+            border-radius: 8px;
+        }
+        .checklist-item input[type="checkbox"] { 
+            width: 22px; 
+            height: 22px; 
+            margin-right: 12px; 
+            cursor: pointer;
+        }
+        .checklist-item label { 
+            flex: 1; 
+            cursor: pointer;
+            color: #92400e;
+            font-size: 15px;
+        }
+        
+        .solution { 
+            background: #dbeafe; 
+            border: 3px solid #3b82f6; 
+            border-radius: 15px; 
+            padding: 30px; 
+            margin: 30px 0;
+            display: none;
+        }
+        .solution h3 { color: #1e40af; margin-bottom: 20px; font-size: 24px; }
+        .solution-step { 
+            background: white; 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+        }
+        .solution-step h4 { color: #1e40af; margin-bottom: 12px; font-size: 18px; }
+        .solution-step p { color: #1e3a8a; line-height: 1.8; margin: 8px 0; }
+        
+        .toggle-btn { 
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
+            color: white; 
+            border: none; 
+            padding: 15px 30px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            font-weight: 600; 
+            margin: 20px 0;
+            transition: transform 0.3s;
+            display: block;
+            width: 100%;
+        }
+        .toggle-btn:hover { 
+            transform: translateY(-2px); 
+        }
+        
+        @media (max-width: 768px) {
+            .content { padding: 20px; }
+            .header h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Progetto Pratico Guidato</h1>
+            <p>Creare una Mini-Presentazione Aziendale</p>
+            <span class="badge">⭐ LIVELLO BASE - GUIDATO</span>
+        </div>
+
+        <div class="content">
+            <div class="scenario-intro">
+                <h2>🎯 La Tua Missione</h2>
+                <p>Lavori in un negozio di elettronica chiamato <strong>"TechStore"</strong>. Il tuo capo ti chiede di preparare un piccolo report sulle vendite di questo mese per la riunione di domani. Devi creare 3 semplici file: un foglio Excel con i dati, un documento Word con il riassunto, e una presentazione PowerPoint con 5 slide.</p>
+            </div>
+
+            <div class="email-box">
+                <div class="email-header">
+                    <div class="email-field"><strong>Da:</strong> capo@techstore.it</div>
+                    <div class="email-field"><strong>A:</strong> te@techstore.it</div>
+                    <div class="email-field"><strong>Oggetto:</strong> Report vendite - Serve per domani</div>
+                </div>
+                <div class="email-body">
+                    <p>Ciao,</p>
+                    <p>ho bisogno di un piccolo report sulle vendite di questo mese. Niente di complicato!</p>
+                    <p><strong>Ti servono:</strong></p>
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>Un foglio Excel con i numeri e un grafico</li>
+                        <li>Un documento Word di 1 pagina con il riassunto</li>
+                        <li>Una presentazione PowerPoint di 5 slide</li>
+                    </ul>
+                    <p>I dati li trovi sotto. Grazie!</p>
+                    <p>Paolo</p>
+                </div>
+            </div>
+
+            <div class="score-display">
+                <h3>Il Tuo Punteggio</h3>
+                <div class="score-value" id="totalScore">0</div>
+                <div class="score-max">/ 100 punti</div>
+            </div>
+
+            <div class="data-box">
+                <h3>📊 Dati Vendite TechStore - Questo Mese</h3>
+                <div class="data-item">
+                    <strong>Settimana 1:</strong> Venduti 25 prodotti, Incasso € 3.500
+                </div>
+                <div class="data-item">
+                    <strong>Settimana 2:</strong> Venduti 32 prodotti, Incasso € 4.200
+                </div>
+                <div class="data-item">
+                    <strong>Settimana 3:</strong> Venduti 28 prodotti, Incasso € 3.800
+                </div>
+                <div class="data-item">
+                    <strong>Settimana 4:</strong> Venduti 35 prodotti, Incasso € 4.500
+                </div>
+                <p style="margin-top: 15px; color: #92400e;"><strong>📝 Nota:</strong> L'obiettivo del mese era vendere 100 prodotti totali.</p>
+            </div>
+
+            <!-- PARTE 1: EXCEL -->
+            <div class="task-section">
+                <h3>📊 PARTE 1: Foglio Excel</h3>
+                
+                <div class="task-card">
+                    <h4>Cosa devi fare <span class="task-points">40 punti</span></h4>
+                    
+                    <ul class="step-list">
+                        <li>Apri Excel e crea una tabella con 3 colonne: Settimana | Prodotti Venduti | Incasso</li>
+                        <li>Inserisci i 4 dati delle settimane (copia i numeri sopra)</li>
+                        <li>Aggiungi una riga "TOTALE" in fondo</li>
+                        <li>Usa la funzione SOMMA per calcolare il totale prodotti e il totale incasso</li>
+                        <li>Formatta gli incassi in Euro (€)</li>
+                        <li>Crea un grafico a colonne con i prodotti venduti per settimana</li>
+                        <li>Dai un titolo al grafico: "Vendite Settimanali"</li>
+                        <li>Salva il file come "Vendite_TechStore.xlsx"</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <strong>💡 Aiuto Excel:</strong>
+                        <p>• Per SOMMA: scrivi =SOMMA(B2:B5) nella cella sotto i numeri</p>
+                        <p>• Per Euro: seleziona celle → Home → Valuta → Euro</p>
+                        <p>• Per grafico: seleziona i dati → Inserisci → Grafico a colonne</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTE 2: WORD -->
+            <div class="task-section">
+                <h3>📝 PARTE 2: Documento Word</h3>
+                
+                <div class="task-card">
+                    <h4>Cosa devi fare <span class="task-points">30 punti</span></h4>
+                    
+                    <ul class="step-list">
+                        <li>Apri Word e scrivi il titolo "Report Vendite TechStore - Questo Mese"</li>
+                        <li>Vai a capo e scrivi la data di oggi</li>
+                        <li>Scrivi un breve paragrafo (5-6 righe) che spiega i risultati</li>
+                        <li>Copia il grafico da Excel e incollalo nel documento</li>
+                        <li>Scrivi sotto al grafico: "Obiettivo raggiunto!" oppure "Obiettivo non raggiunto"</li>
+                        <li>Formatta il titolo in grassetto e più grande</li>
+                        <li>Controlla l'ortografia (F7)</li>
+                        <li>Salva come "Report_TechStore.docx"</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <strong>💡 Aiuto Word:</strong>
+                        <p>• Esempio paragrafo: "Questo mese abbiamo venduto un totale di 120 prodotti con un incasso di 16.000 euro. La settimana migliore è stata la quarta con 35 prodotti venduti..."</p>
+                        <p>• Per copiare grafico: vai in Excel → clic sul grafico → Ctrl+C → vai in Word → Ctrl+V</p>
+                        <p>• Per grassetto: seleziona testo → Ctrl+B</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTE 3: POWERPOINT -->
+            <div class="task-section">
+                <h3>🎨 PARTE 3: Presentazione PowerPoint</h3>
+                
+                <div class="task-card">
+                    <h4>Cosa devi fare <span class="task-points">30 punti</span></h4>
+                    
+                    <ul class="step-list">
+                        <li><strong>Slide 1:</strong> Titolo "Report Vendite TechStore" + il tuo nome</li>
+                        <li><strong>Slide 2:</strong> Titolo "I Numeri del Mese" + scrivi i totali in grande</li>
+                        <li><strong>Slide 3:</strong> Titolo "Grafico Vendite" + incolla il grafico da Excel</li>
+                        <li><strong>Slide 4:</strong> Titolo "Settimana Migliore" + scrivi quale settimana ha venduto di più</li>
+                        <li><strong>Slide 5:</strong> Titolo "Conclusione" + scrivi "Obiettivo raggiunto ✓" o "Da migliorare"</li>
+                        <li>Scegli un tema/design carino (Design → scegli un tema)</li>
+                        <li>Aggiungi una transizione tra le slide (uguale per tutte)</li>
+                        <li>Salva come "Presentazione_TechStore.pptx"</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <strong>💡 Aiuto PowerPoint:</strong>
+                        <p>• Slide 2 esempio: scrivi in grande "120 Prodotti" e "€ 16.000 Incasso"</p>
+                        <p>• Per copiare grafico: apri Excel → Ctrl+C sul grafico → apri PowerPoint → Ctrl+V</p>
+                        <p>• Per transizioni: Transizioni → Dissolvenza → Applica a tutte</p>
+                        <p>• Usa font grandi e leggibili (almeno 24pt per il testo)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHECKLIST -->
+            <div class="checklist">
+                <h3>✅ Controlla di aver fatto tutto</h3>
+                
+                <div class="checklist-item">
+                    <input type="checkbox" id="check1" onchange="updateScore()">
+                    <label for="check1">Excel: Tabella con 3 colonne e 4 righe di dati</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check2" onchange="updateScore()">
+                    <label for="check2">Excel: Riga TOTALE con funzione SOMMA</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check3" onchange="updateScore()">
+                    <label for="check3">Excel: Incassi formattati in Euro (€)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check4" onchange="updateScore()">
+                    <label for="check4">Excel: Grafico a colonne creato con titolo</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check5" onchange="updateScore()">
+                    <label for="check5">Word: Titolo del documento presente</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check6" onchange="updateScore()">
+                    <label for="check6">Word: Paragrafo di spiegazione scritto</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check7" onchange="updateScore()">
+                    <label for="check7">Word: Grafico incollato nel documento</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check8" onchange="updateScore()">
+                    <label for="check8">Word: Controllo ortografico fatto</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check9" onchange="updateScore()">
+                    <label for="check9">PowerPoint: 5 slide create</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check10" onchange="updateScore()">
+                    <label for="check10">PowerPoint: Grafico presente in una slide</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check11" onchange="updateScore()">
+                    <label for="check11">PowerPoint: Tema/design applicato</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check12" onchange="updateScore()">
+                    <label for="check12">PowerPoint: Transizioni aggiunte</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check13" onchange="updateScore()">
+                    <label for="check13">Tutti i file hanno nomi corretti</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check14" onchange="updateScore()">
+                    <label for="check14">I calcoli sono corretti (120 prodotti totali)</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check15" onchange="updateScore()">
+                    <label for="check15">Il grafico è leggibile e chiaro</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check16" onchange="updateScore()">
+                    <label for="check16">Il testo Word è ben scritto</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check17" onchange="updateScore()">
+                    <label for="check17">Le slide PowerPoint sono ordinate</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check18" onchange="updateScore()">
+                    <label for="check18">Tutti i file si aprono correttamente</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check19" onchange="updateScore()">
+                    <label for="check19">Hai verificato che l'obiettivo (100 prodotti) sia raggiunto</label>
+                </div>
+                <div class="checklist-item">
+                    <input type="checkbox" id="check20" onchange="updateScore()">
+                    <label for="check20">Il lavoro è completo e pronto da consegnare</label>
+                </div>
+            </div>
+
+            <!-- SOLUZIONE -->
+            <button class="toggle-btn" onclick="toggleSolution()">💡 Mostra la Soluzione Passo-Passo</button>
+            
+            <div class="solution" id="solution">
+                <h3>📖 Soluzione Completa</h3>
+                
+                <div class="solution-step">
+                    <h4>📊 EXCEL - Come fare</h4>
+                    <p><strong>1. Crea la tabella:</strong></p>
+                    <p>• Apri Excel</p>
+                    <p>• Cella A1: scrivi "Settimana"</p>
+                    <p>• Cella B1: scrivi "Prodotti Venduti"</p>
+                    <p>• Cella C1: scrivi "Incasso"</p>
+                    <p>• Cella A2: scrivi "Settimana 1", B2: "25", C2: "3500"</p>
+                    <p>• Cella A3: scrivi "Settimana 2", B3: "32", C3: "4200"</p>
+                    <p>• Cella A4: scrivi "Settimana 3", B4: "28", C4: "3800"</p>
+                    <p>• Cella A5: scrivi "Settimana 4", B5: "35", C5: "4500"</p>
+                    
+                    <p style="margin-top: 15px;"><strong>2. Aggiungi i totali:</strong></p>
+                    <p>• Cella A6: scrivi "TOTALE"</p>
+                    <p>• Cella B6: scrivi =SOMMA(B2:B5) e premi Invio</p>
+                    <p>• Cella C6: scrivi =SOMMA(C2:C5) e premi Invio</p>
+                    
+                    <p style="margin-top: 15px;"><strong>3. Formatta in Euro:</strong></p>
+                    <p>• Seleziona le celle C2, C3, C4, C5, C6 (tieni premuto Ctrl mentre clicchi)</p>
+                    <p>• Vai su Home → nella sezione Numero clicca su "€ Euro"</p>
+                    
+                    <p style="margin-top: 15px;"><strong>4. Crea il grafico:</strong></p>
+                    <p>• Seleziona le celle A1:B5 (dalla cella A1 a B5)</p>
+                    <p>• Vai su Inserisci → Grafici → Istogramma → Istogramma a colonne</p>
+                    <p>• Clicca sul grafico e in alto scrivi il titolo: "Vendite Settimanali"</p>
+                    
+                    <p style="margin-top: 15px;"><strong>5. Salva:</strong></p>
+                    <p>• File → Salva con nome → Scegli dove salvare</p>
+                    <p>• Nome file: "Vendite_TechStore"</p>
+                    <p>• Clicca Salva</p>
+                </div>
+
+                <div class="solution-step">
+                    <h4>📝 WORD - Come fare</h4>
+                    <p><strong>1. Crea il documento:</strong></p>
+                    <p>• Apri Word</p>
+                    <p>• Scrivi: "Report Vendite TechStore - Questo Mese"</p>
+                    <p>• Seleziona il titolo → Ctrl+B (grassetto) → Home → Dimensione font → 18</p>
+                    <p>• Vai a capo (Invio) e scrivi la data di oggi</p>
+                    
+                    <p style="margin-top: 15px;"><strong>2. Scrivi il paragrafo:</strong></p>
+                    <p>• Vai a capo due volte</p>
+                    <p>• Scrivi: "Questo mese il negozio TechStore ha registrato ottimi risultati. Abbiamo venduto un totale di 120 prodotti, superando l'obiettivo di 100 prodotti. L'incasso totale è stato di 16.000 euro. La settimana migliore è stata la quarta settimana con 35 prodotti venduti e 4.500 euro di incasso. Questo dimostra un trend positivo nelle vendite."</p>
+                    
+                    <p style="margin-top: 15px;"><strong>3. Incolla il grafico:</strong></p>
+                    <p>• Apri il file Excel che hai fatto prima</p>
+                    <p>• Clicca sul grafico → Ctrl+C (copia)</p>
+                    <p>• Torna su Word → metti il cursore dove vuoi il grafico → Ctrl+V (incolla)</p>
+                    <p>• Vai a capo e scrivi: "Obiettivo raggiunto! ✓"</p>
+                    
+                    <p style="margin-top: 15px;"><strong>4. Controllo e salvataggio:</strong></p>
+                    <p>• Premi F7 per il controllo ortografico</p>
+                    <p>• File → Salva con nome → Nome: "Report_TechStore"</p>
+                </div>
+
+                <div class="solution-step">
+                    <h4>🎨 POWERPOINT - Come fare</h4>
+                    <p><strong>Slide 1 - Titolo:</strong></p>
+                    <p>• Apri PowerPoint (si apre automaticamente con una slide)</p>
+                    <p>• Clicca dove dice "Fare clic per aggiungere titolo"</p>
+                    <p>• Scrivi: "Report Vendite TechStore"</p>
+                    <p>• Clicca sotto e scrivi: "A cura di [il tuo nome]"</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Slide 2 - I Numeri:</strong></p>
+                    <p>• Clicca su "Nuova diapositiva"</p>
+                    <p>• Titolo: "I Numeri del Mese"</p>
+                    <p>• Nel box sotto scrivi in grande:</p>
+                    <p>  "120 Prodotti Venduti"</p>
+                    <p>  "€ 16.000 di Incasso"</p>
+                    <p>• Seleziona il testo → aumenta dimensione → 32</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Slide 3 - Grafico:</strong></p>
+                    <p>• Nuova diapositiva</p>
+                    <p>• Titolo: "Grafico Vendite"</p>
+                    <p>• Apri il file Excel → copia il grafico (Ctrl+C)</p>
+                    <p>• Torna su PowerPoint → Ctrl+V</p>
+                    <p>• Ridimensiona il grafico se è troppo grande</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Slide 4 - Settimana Migliore:</strong></p>
+                    <p>• Nuova diapositiva</p>
+                    <p>• Titolo: "Settimana Migliore"</p>
+                    <p>• Scrivi: "La Settimana 4 con 35 prodotti venduti!"</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Slide 5 - Conclusione:</strong></p>
+                    <p>• Nuova diapositiva</p>
+                    <p>• Titolo: "Conclusione"</p>
+                    <p>• Scrivi: "Obiettivo raggiunto! ✓"</p>
+                    <p>• Scrivi sotto: "Ottimo lavoro di squadra!"</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Design e Transizioni:</strong></p>
+                    <p>• Vai su Design → scegli un tema che ti piace (es. "Facet" o "Ion")</p>
+                    <p>• Vai su Transizioni → scegli "Dissolvenza"</p>
+                    <p>• Clicca su "Applica a tutte"</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Salva:</strong></p>
+                    <p>• File → Salva con nome → "Presentazione_TechStore"</p>
+                </div>
+
+                <div class="solution-step">
+                    <h4>✅ Valutazione</h4>
+                    <p><strong>Il tuo lavoro sarà valutato così:</strong></p>
+                    <p>• <strong>Excel (40 punti):</strong> Tabella corretta, totali giusti, grafico fatto bene</p>
+                    <p>• <strong>Word (30 punti):</strong> Testo chiaro, grafico inserito, formattazione pulita</p>
+                    <p>• <strong>PowerPoint (30 punti):</strong> 5 slide complete, grafico presente, design carino</p>
+                    <p style="margin-top: 15px;"><strong>Punteggi:</strong></p>
+                    <p>• 90-100 punti: Eccellente! 🌟</p>
+                    <p>• 75-89 punti: Molto bene! 👍</p>
+                    <p>• 60-74 punti: Buono, ma puoi migliorare ✓</p>
+                    <p>• Sotto 60: Riprova con più attenzione 💪</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function updateScore() {
+            let score = 0;
+            for (let i = 1; i <= 20; i++) {
+                if (document.getElementById('check' + i).checked) {
+                    score += 5;
+                }
+            }
+            document.getElementById('totalScore').textContent = score;
+        }
+
+        function toggleSolution() {
+            const solution = document.getElementById('solution');
+            if (solution.style.display === 'none' || solution.style.display === '') {
+                solution.style.display = 'block';
+                event.target.textContent = '🔒 Nascondi Soluzione';
+            } else {
+                solution.style.display = 'none';
+                event.target.textContent = '💡 Mostra la Soluzione Passo-Passo';
+            }
+        }
+    </script>
+</body>
+</html>
