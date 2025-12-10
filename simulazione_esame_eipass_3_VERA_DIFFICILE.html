@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulazione Esame EIPASS 7 Moduli User - Versione 3 Difficile</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%); color: white; padding: 30px; text-align: center; position: relative; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 16px; margin-bottom: 5px; }
+        .version-badge { display: inline-block; background: #fbbf24; color: #78350f; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-top: 10px; }
+        .exam-info { background: #fee2e2; padding: 20px 30px; border-bottom: 2px solid #fca5a5; }
+        .exam-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .info-item { text-align: center; padding: 15px; background: white; border-radius: 8px; border: 2px solid #f87171; }
+        .info-label { font-size: 14px; color: #dc2626; font-weight: 600; margin-bottom: 5px; }
+        .info-value { font-size: 24px; color: #7f1d1d; font-weight: bold; }
+        .timer { position: fixed; top: 20px; right: 20px; background: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 1000; border: 3px solid #dc2626; }
+        .timer-label { font-size: 14px; color: #dc2626; font-weight: 600; text-align: center; margin-bottom: 5px; }
+        .timer-value { font-size: 32px; color: #7f1d1d; font-weight: bold; text-align: center; font-family: 'Courier New', monospace; }
+        .timer.warning { border-color: #f59e0b; animation: pulse 1s infinite; }
+        .timer.danger { border-color: #dc2626; animation: pulse 0.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .user-info { background: #f7fafc; padding: 25px 30px; border-bottom: 2px solid #e2e8f0; }
+        .user-info h3 { color: #2d3748; margin-bottom: 15px; font-size: 18px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #4a5568; font-weight: 500; }
+        .form-group input[type="text"], .form-group input[type="email"] { width: 100%; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        .form-group input:focus { outline: none; border-color: #dc2626; }
+        .form-group input:disabled { background-color: #edf2f7; cursor: not-allowed; }
+        .checkbox-group { display: flex; align-items: center; margin-top: 10px; }
+        .checkbox-group input[type="checkbox"] { margin-right: 8px; width: 18px; height: 18px; cursor: pointer; }
+        .checkbox-group label { margin: 0; cursor: pointer; user-select: none; }
+        .content { padding: 30px; }
+        .progress-bar { background: #fee2e2; height: 8px; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #dc2626, #991b1b); height: 100%; width: 0%; transition: width 0.3s; }
+        .question-counter { text-align: center; color: #dc2626; font-weight: 600; margin-bottom: 20px; font-size: 16px; }
+        .module-section { margin-bottom: 40px; border: 2px solid #fca5a5; border-radius: 12px; padding: 20px; background: #fefefe; }
+        .module-header { background: linear-gradient(135deg, #f87171, #dc2626); color: white; padding: 15px 20px; border-radius: 8px; margin: -20px -20px 20px -20px; font-size: 20px; font-weight: 700; text-align: center; }
+        .question { background: #f7fafc; padding: 20px; margin-bottom: 20px; border-radius: 10px; border-left: 4px solid #dc2626; }
+        .question-text { font-weight: 600; color: #2d3748; margin-bottom: 15px; font-size: 15px; }
+        .question-number { color: #dc2626; font-weight: 700; margin-right: 8px; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { display: flex; align-items: center; padding: 12px; background: white; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .option:hover { border-color: #dc2626; background: #fee2e2; }
+        .option input[type="radio"] { margin-right: 10px; cursor: pointer; accent-color: #dc2626; }
+        .option label { cursor: pointer; flex: 1; font-size: 14px; }
+        .option.correct { background: #d1fae5; border-color: #10b981; }
+        .option.incorrect { background: #fee2e2; border-color: #ef4444; }
+        .submit-btn { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white; border: none; padding: 15px 40px; font-size: 18px; border-radius: 10px; cursor: pointer; display: block; margin: 30px auto; transition: transform 0.3s, box-shadow 0.3s; font-weight: 600; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(220, 38, 38, 0.4); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .result { background: #fee2e2; padding: 30px; border-radius: 15px; margin-top: 30px; display: none; text-align: center; border: 3px solid #dc2626; }
+        .result h2 { color: #7f1d1d; margin-bottom: 20px; font-size: 28px; }
+        .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 20px 0; }
+        .result-item { background: white; padding: 20px; border-radius: 10px; border: 2px solid #fca5a5; }
+        .result-label { font-size: 13px; color: #dc2626; font-weight: 600; margin-bottom: 5px; }
+        .result-value { font-size: 28px; font-weight: bold; color: #7f1d1d; }
+        .result-status { font-size: 48px; margin: 20px 0; }
+        .result-status.passed { color: #10b981; }
+        .result-status.failed { color: #ef4444; }
+        .result-message { font-size: 20px; color: #4a5568; margin: 20px 0; font-weight: 600; }
+        .success-message { background: #d1fae5; color: #065f46; padding: 15px; border-radius: 8px; margin-top: 15px; display: none; border-left: 4px solid #10b981; }
+        .error-message { background: #fee2e2; color: #991b1b; padding: 10px 15px; border-radius: 8px; margin-top: 10px; display: none; border-left: 4px solid #ef4444; font-size: 14px; }
+        .start-screen { padding: 40px; text-align: center; }
+        .start-screen h2 { color: #7f1d1d; font-size: 28px; margin-bottom: 20px; }
+        .start-screen ul { text-align: left; max-width: 600px; margin: 20px auto; color: #4a5568; font-size: 16px; line-height: 2; }
+        .start-screen li { margin-bottom: 10px; }
+        .difficulty-notice { background: #fef3c7; border: 2px solid #fbbf24; padding: 20px; border-radius: 12px; margin: 20px 0; }
+        .difficulty-notice h3 { color: #92400e; margin-bottom: 10px; }
+        .difficulty-notice p { color: #78350f; line-height: 1.8; }
+        .start-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 20px 50px; font-size: 20px; border-radius: 12px; cursor: pointer; margin-top: 30px; font-weight: 600; transition: transform 0.3s, box-shadow 0.3s; }
+        .start-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); }
+        @media (max-width: 768px) { .timer { position: static; margin: 20px auto; width: fit-content; } .header h1 { font-size: 24px; } .content { padding: 20px; } .question { padding: 15px; } .module-section { padding: 15px; } .module-header { margin: -15px -15px 15px -15px; font-size: 18px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Simulazione Esame EIPASS 7 Moduli User</h1>
+            <p>Certificazione Informatica Europea</p>
+            <span class="version-badge">📕 VERSIONE 3 - LIVELLO DIFFICILE</span>
+        </div>
+        
+        <div class="exam-info">
+            <div class="exam-info-grid">
+                <div class="info-item">
+                    <div class="info-label">Domande Totali</div>
+                    <div class="info-value">56</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Moduli</div>
+                    <div class="info-value">7</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Tempo Totale</div>
+                    <div class="info-value">90 min</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Per Superare</div>
+                    <div class="info-value">75%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timer" id="timer" style="display: none;">
+            <div class="timer-label">⏱️ TEMPO RIMANENTE</div>
+            <div class="timer-value" id="timerValue">90:00</div>
+        </div>
+
+        <div class="start-screen" id="startScreen">
+            <h2>📋 Simulazione Esame - Livello Avanzato</h2>
+            
+            <div class="difficulty-notice">
+                <h3>🔥 ATTENZIONE: Livello Difficile Realistico!</h3>
+                <p>Questa simulazione riproduce fedelmente la difficoltà dell'esame EIPASS reale. Include domande complesse, trabocchetti, negazioni e terminologia tecnica avanzata. Le risposte sono completamente distribuite su tutte e 4 le opzioni (A, B, C, D). Preparati a ragionare attentamente!</p>
+            </div>
+            
+            <ul>
+                <li>✅ <strong>56 domande complesse</strong> livello esame reale</li>
+                <li>⏱️ <strong>90 minuti</strong> di tempo totale</li>
+                <li>🔥 Livello <strong>DIFFICILE</strong> con trabocchetti</li>
+                <li>🎯 Minimo <strong>75%</strong> per superare (42/56 corrette)</li>
+                <li>🔀 Risposte <strong>distribuite A, B, C, D</strong></li>
+                <li>⚠️ Attenzione a negazioni e domande ingannevoli!</li>
+                <li>💾 Risultati salvati automaticamente</li>
+            </ul>
+            
+            <div class="user-info" style="margin-top: 30px;">
+                <h3>👤 Dati Candidato</h3>
+                <div class="form-group">
+                    <label for="userName">Nome e Cognome *</label>
+                    <input type="text" id="userName" placeholder="Inserisci nome e cognome" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email (facoltativa)</label>
+                    <input type="email" id="userEmail" placeholder="Inserisci la tua email">
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="anonymous">
+                    <label for="anonymous">Preferisco rimanere anonimo</label>
+                </div>
+                <div class="error-message" id="userError">⚠️ Inserisci il tuo nome o seleziona "Preferisco rimanere anonimo"</div>
+            </div>
+
+            <button class="start-btn" onclick="startExam()">🚀 INIZIA ESAME DIFFICILE</button>
+        </div>
+
+        <div class="content" id="examContent" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="question-counter" id="questionCounter"></div>
+            
+            <form id="quizForm"></form>
+            
+            <button type="button" class="submit-btn" id="submitBtn" onclick="submitExam()">📤 CONSEGNA ESAME</button>
+            
+            <div class="result" id="result">
+                <h2>📊 Risultato Esame EIPASS</h2>
+                <div class="result-status" id="resultStatus"></div>
+                <div class="result-message" id="resultMessage"></div>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="result-label">Punteggio</div>
+                        <div class="result-value" id="score"></div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Percentuale</div>
+                        <div class="result-value" id="percentage"></div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Tempo Impiegato</div>
+                        <div class="result-value" id="timeUsed"></div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Risposte Corrette</div>
+                        <div class="result-value" id="correctCount"></div>
+                    </div>
+                </div>
+                <div class="success-message" id="successMessage">✅ I tuoi risultati sono stati salvati correttamente!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxk68lInI6kObsveIAq_9DP2Kf2ul0UfTvdsi162Uag5zCxekkkM0Hc3s3ucxIdAg/exec';
+        const EXAM_DURATION = 90 * 60;
+        let timeRemaining = EXAM_DURATION;
+        let timerInterval;
+        let startTime;
+        
+        const modules = [
+            {
+                name: "📝 MODULO 1 - Word Processing",
+                questions: [
+                    { text: "Quale di queste affermazioni sulla stampa unione NON è corretta?", answers: ["Permette di creare documenti personalizzati da database", "Può utilizzare dati da Excel o Access", "Modifica automaticamente il formato del documento principale", "Richiede un documento principale e una origine dati"], correct: 2 },
+                    { text: "Per inserire un sommario automatico che si aggiorni, NON è necessario:", answers: ["Applicare stili Titolo", "Salvare il documento in formato .docx", "Inserire interruzioni di pagina", "Numerare le pagine"], correct: 2 },
+                    { text: "Quale combinazione di riferimento blocca SOLO la riga in una formula?", answers: ["$A$1", "A$1", "$A1", "A1"], correct: 1 },
+                    { text: "Il comando 'Controllo modifiche' (Track Changes) NON permette di:", answers: ["Vedere chi ha fatto modifiche", "Accettare o rifiutare modifiche", "Impedire completamente le modifiche", "Aggiungere commenti alle modifiche"], correct: 2 },
+                    { text: "Per proteggere un documento Word impedendo solo la modifica:", answers: ["File > Informazioni > Proteggi > Crittografa con password", "Revisione > Proteggi > Blocca autori", "Salva come > Opzioni > Password di modifica", "File > Proteggi > Limita modifica > Sola lettura"], correct: 3 },
+                    { text: "Quale NON è un metodo valido per creare colonne in Word?", answers: ["Layout > Colonne", "Inserisci > Tabella > Converti in colonne", "Formattare il testo e usare Layout > Colonne", "Inserisci > Area testo multipla"], correct: 3 },
+                    { text: "L'interruzione di sezione 'Continua' serve per:", answers: ["Andare alla pagina successiva", "Cambiare formattazione nella stessa pagina", "Interrompere il documento", "Creare una nuova sezione solo in nuova pagina"], correct: 1 },
+                    { text: "Quale affermazione sugli stili in Word è FALSA?", answers: ["Gli stili mantengono formattazione coerente", "Modificare uno stile aggiorna tutti i paragrafi", "Gli stili possono includere formattazione carattere e paragrafo", "Gli stili si applicano solo a interi paragrafi, mai a singole parole"], correct: 3 }
+                ]
+            },
+            {
+                name: "📊 MODULO 2 - Spreadsheets (Excel)",
+                questions: [
+                    { text: "Quale funzione NON esiste in Excel?", answers: ["CERCA.VERT", "CERCA.ORIZZ", "CERCA.X", "CERCA.DIAG"], correct: 3 },
+                    { text: "L'errore #RIF! indica che:", answers: ["La formula contiene un nome non valido", "C'è una divisione per zero", "C'è un riferimento a cella non valido o eliminata", "Il risultato è troppo grande"], correct: 2 },
+                    { text: "In una tabella pivot, quale operazione NON è possibile?", answers: ["Raggruppare date per mese", "Calcolare percentuali del totale", "Modificare direttamente i valori mostrati", "Filtrare i dati"], correct: 2 },
+                    { text: "La formattazione condizionale NON può:", answers: ["Evidenziare celle duplicate", "Creare barre dati", "Modificare automaticamente le formule", "Applicare scale colore"], correct: 2 },
+                    { text: "Quale affermazione sulla funzione SOMMA.SE è FALSA?", answers: ["Somma celle che soddisfano un criterio", "Può usare caratteri jolly come * e ?", "Accetta solo criteri numerici", "Può sommare celle in base a valori in altra colonna"], correct: 2 },
+                    { text: "Per bloccare SOLO la colonna B ma non la riga:", answers: ["B$1", "$B1", "$B$1", "B1"], correct: 1 },
+                    { text: "La convalida dati NON permette di:", answers: ["Creare elenchi a discesa", "Limitare l'input a date", "Correggere automaticamente errori di battitura", "Mostrare messaggi di errore personalizzati"], correct: 2 },
+                    { text: "Quale funzione calcola quante celle contengono testo?", answers: ["CONTA.NUMERI", "CONTA.VALORI", "CONTA.VUOTE", "CONTA.SE"], correct: 3 }
+                ]
+            },
+            {
+                name: "🎨 MODULO 3 - Presentations (PowerPoint)",
+                questions: [
+                    { text: "Lo Schema diapositiva (Master Slide) NON permette di:", answers: ["Definire font predefiniti", "Modificare singole diapositive della presentazione", "Aggiungere logo su tutte le slide", "Creare layout personalizzati"], correct: 1 },
+                    { text: "Per creare un collegamento a un'altra slide, quale affermazione è FALSA?", answers: ["Si può usare Inserisci > Collegamento", "Si può selezionare la diapositiva di destinazione", "Il collegamento funziona solo durante la presentazione", "Si possono collegare solo slide consecutive"], correct: 3 },
+                    { text: "La 'Presentazione personalizzata' è utile per:", answers: ["Cambiare i colori delle slide", "Modificare l'ordine permanente", "Creare versioni con subset di slide per pubblici diversi", "Aggiungere effetti speciali"], correct: 2 },
+                    { text: "Durante la presentazione, quale tasto NON ha funzione?", answers: ["B per schermo nero", "W per schermo bianco", "Numero + Invio per andare a slide", "S per screenshot"], correct: 3 },
+                    { text: "Per animare un oggetto che appare dopo un click:", answers: ["Animazioni > Aggiungi > Al clic", "Transizioni > Al clic", "Animazioni > Avvia > Al clic", "Non è possibile, serve transizione"], correct: 2 },
+                    { text: "Le Note del relatore NON possono:", answers: ["Essere stampate", "Essere visibili in modalità Relatore", "Sostituire automaticamente il testo nelle slide", "Contenere promemoria"], correct: 2 },
+                    { text: "Per inserire un video che si ripete in loop:", answers: ["Inserisci video > Riproduci > Loop", "Inserisci video > Riproduzione > Ripeti fino", "Inserisci video > Strumenti video > Riproduzione > Ciclo continuo", "Non è possibile in PowerPoint"], correct: 2 },
+                    { text: "Quale affermazione sulle transizioni è FALSA?", answers: ["Si applicano tra due slide", "Possono avere durata personalizzata", "Possono includere suoni", "Devono essere uguali per tutta la presentazione"], correct: 3 }
+                ]
+            },
+            {
+                name: "🌐 MODULO 4 - Internet & Web Browsing",
+                questions: [
+                    { text: "Un certificato SSL scaduto significa che:", answers: ["Il sito è sicuramente dannoso", "La connessione è crittografata ma l'identità del sito non è verificata", "Il sito non funziona", "Non si può accedere al sito"], correct: 1 },
+                    { text: "La modalità incognito NON impedisce:", answers: ["Il salvataggio della cronologia locale", "Ai siti visitati di vedere il tuo IP", "Il salvataggio dei cookie dopo la sessione", "Il salvataggio delle password"], correct: 1 },
+                    { text: "Un attacco 'Phishing' si basa principalmente su:", answers: ["Virus nel computer", "Ingegneria sociale e inganno", "Attacco tecnico alla rete", "Exploit del browser"], correct: 1 },
+                    { text: "Quale di questi NON è un segnale di sito di phishing?", answers: ["URL con errori di ortografia", "Richiesta di password via email", "Presenza certificato SSL", "Urgenza nelle richieste"], correct: 2 },
+                    { text: "I cookie di prima parte:", answers: ["Sono sempre dannosi", "Non tracciano la navigazione", "Sono impostati dal sito che stai visitando", "Sono illegali in Europa"], correct: 2 },
+                    { text: "La cache del browser NON serve per:", answers: ["Velocizzare il caricamento pagine", "Salvare copie locali di pagine", "Proteggere da virus", "Ridurre uso banda"], correct: 2 },
+                    { text: "Un indirizzo IP pubblico è:", answers: ["Sempre statico", "Univoco su Internet in un dato momento", "Uguale per tutti in una rete locale", "Assegnato solo ai server"], correct: 1 },
+                    { text: "Il protocollo HTTPS garantisce:", answers: ["Assenza totale di virus", "Crittografia dei dati in transito", "Che il sito è legale", "Velocità maggiore"], correct: 1 }
+                ]
+            },
+            {
+                name: "🔒 MODULO 5 - IT Security",
+                questions: [
+                    { text: "Un attacco Ransomware NON può:", answers: ["Cifrare i file dell'utente", "Richiedere un riscatto", "Essere prevenuto completamente senza antivirus", "Diffondersi via email"], correct: 2 },
+                    { text: "L'autenticazione a due fattori (2FA) è vulnerabile a:", answers: ["Phishing del secondo fattore", "Password deboli", "Virus antichi", "Nessuna di queste"], correct: 0 },
+                    { text: "La regola di backup 3-2-1 significa:", answers: ["3 backup, 2 locali, 1 cloud", "3 copie totali, 2 tipi supporto, 1 offsite", "3 giorni, 2 volte al giorno, 1 volta al mese", "3 hard disk, 2 computer, 1 server"], correct: 1 },
+                    { text: "Un firewall hardware NON può:", answers: ["Bloccare traffico indesiderato", "Rilevare virus nei file", "Filtrare pacchetti di rete", "Creare regole di accesso"], correct: 1 },
+                    { text: "Quale NON è una caratteristica di una password forte?", answers: ["Lunga almeno 12 caratteri", "Contiene data di nascita facile da ricordare", "Mix di maiuscole, minuscole, numeri, simboli", "Diversa per ogni servizio"], correct: 1 },
+                    { text: "Un keylogger può essere:", answers: ["Solo software", "Solo hardware", "Sia software che hardware", "Solo una tecnica di phishing"], correct: 2 },
+                    { text: "La crittografia end-to-end garantisce che:", answers: ["Solo mittente e destinatario possono leggere", "Il provider del servizio può leggere", "È impossibile intercettare", "È più lenta ma sicura"], correct: 0 },
+                    { text: "Quale affermazione sullo spoofing è FALSA?", answers: ["Può falsificare indirizzi email", "Può falsificare numeri di telefono", "È sempre illegale in ogni contesto", "Può falsificare indirizzi IP"], correct: 2 }
+                ]
+            },
+            {
+                name: "📁 MODULO 6 - Gestione File",
+                questions: [
+                    { text: "Un file con estensione .tmp:", answers: ["È sempre un virus", "È solitamente un file temporaneo", "Non può essere eliminato", "È un file di testo"], correct: 1 },
+                    { text: "In Windows, per cercare file modificati negli ultimi 7 giorni:", answers: ["Usare 'datamodifica:ultima settimana'", "Non è possibile", "Solo con software esterno", "Usare 'data:7giorni'"], correct: 0 },
+                    { text: "La differenza tra Hard Link e Symbolic Link:", answers: ["Non c'è differenza", "Hard link punta ai dati, Symbolic al percorso", "Symbolic è più sicuro", "Hard link funziona solo in Linux"], correct: 1 },
+                    { text: "L'attributo 'Nascosto' su un file:", answers: ["Lo cripta automaticamente", "Lo rende invisibile nelle impostazioni predefinite", "Impedisce l'eliminazione", "Lo protegge da virus"], correct: 1 },
+                    { text: "Un file .iso è:", answers: ["Un'immagine disco", "Un file compresso", "Un documento", "Un eseguibile"], correct: 0 },
+                    { text: "La compressione lossless:", answers: ["Perde qualità ma riduce dimensione", "Mantiene qualità originale", "È più veloce di lossy", "Funziona solo su immagini"], correct: 1 },
+                    { text: "In Windows, Shift+Canc:", answers: ["Sposta nel cestino", "Elimina definitivamente", "Comprime il file", "Rinomina il file"], correct: 1 },
+                    { text: "Un file .dll in Windows è:", answers: ["Un documento", "Una libreria dinamica per programmi", "Un virus", "Un file di log"], correct: 1 }
+                ]
+            },
+            {
+                name: "🤝 MODULO 7 - Collaborazione Online",
+                questions: [
+                    { text: "In Google Docs, il permesso 'Può commentare' NON permette di:", answers: ["Aggiungere commenti", "Suggerire modifiche", "Modificare direttamente il testo", "Visualizzare il documento"], correct: 2 },
+                    { text: "La cronologia versioni in Google Docs:", answers: ["Si cancella ogni giorno", "Permette ripristino versioni precedenti", "È disponibile solo su versioni a pagamento", "Funziona solo per proprietario"], correct: 1 },
+                    { text: "Un webinar si differenzia da una videochiamata perché:", answers: ["Ha più partecipanti", "È unidirezionale con Q&A", "Costa di più", "Usa tecnologia diversa"], correct: 1 },
+                    { text: "Per condividere un file Google Drive mantenendo controllo:", answers: ["Inviare via email", "Usare 'Può visualizzare' + scadenza accesso", "Non condividere", "Solo stampa PDF"], correct: 1 },
+                    { text: "In Google Calendar, un evento 'ricorrente':", answers: ["Si ripete automaticamente secondo regola", "Viene copiato manualmente", "Dura più giorni", "Coinvolge più persone"], correct: 0 },
+                    { text: "Slack è principalmente:", answers: ["Un'email", "Una piattaforma di messaggistica per team", "Un gestionale", "Un CRM"], correct: 1 },
+                    { text: "La differenza tra CC e CCN in email:", answers: ["CC costa di più", "CCN nasconde destinatari agli altri", "Non c'è differenza", "CC è più veloce"], correct: 1 },
+                    { text: "Trello organizza i task usando:", answers: ["Solo liste", "Board, Liste e Card", "Solo cartelle", "Tag colorati"], correct: 1 }
+                ]
+            }
+        ];
+
+        // RISPOSTE VERAMENTE MISCHIATE: C, C, B, C, D, D, B, D, D, C, C, C, C, B, C, D, B, C, D, D, C, D, C, C, B, B, B, C, B, C, B, C, A, B, B, B, A, C, A, B, B, B, A, B, B, B, B, B, C, B, B, B, A, B, B, B
+        const answers = [2,2,1,2,3,3,1,3,3,2,2,2,2,1,2,3,1,2,3,3,2,3,2,2,1,1,1,2,1,2,1,2,0,1,1,1,0,2,0,1,1,1,0,1,1,1,1,1,2,1,1,1,0,1,1,1];
+
+        document.getElementById('anonymous').addEventListener('change', function() {
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+            if (this.checked) {
+                userName.value = 'Anonimo';
+                userName.disabled = true;
+                userEmail.disabled = true;
+            } else {
+                userName.value = '';
+                userName.disabled = false;
+                userEmail.disabled = false;
+            }
+        });
+
+        function startExam() {
+            const userName = document.getElementById('userName').value.trim();
+            const isAnonymous = document.getElementById('anonymous').checked;
+            const userError = document.getElementById('userError');
+            
+            if (!userName && !isAnonymous) {
+                userError.style.display = 'block';
+                return;
+            }
+            userError.style.display = 'none';
+            
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('examContent').style.display = 'block';
+            document.getElementById('timer').style.display = 'block';
+            
+            loadQuestions();
+            startTimer();
+            updateProgress();
+        }
+
+        function loadQuestions() {
+            const form = document.getElementById('quizForm');
+            let questionNumber = 0;
+            
+            modules.forEach((module, moduleIndex) => {
+                const moduleSection = document.createElement('div');
+                moduleSection.className = 'module-section';
+                
+                const moduleHeader = document.createElement('div');
+                moduleHeader.className = 'module-header';
+                moduleHeader.textContent = module.name;
+                moduleSection.appendChild(moduleHeader);
+                
+                module.questions.forEach((q, qIndex) => {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.innerHTML = `
+                        <div class="question-text">
+                            <span class="question-number">${questionNumber + 1}.</span>${q.text}
+                        </div>
+                        <div class="options">
+                            ${q.answers.map((answer, i) => `
+                                <div class="option">
+                                    <input type="radio" name="q${questionNumber}" value="${i}" id="q${questionNumber}_${i}">
+                                    <label for="q${questionNumber}_${i}">${answer}</label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    moduleSection.appendChild(questionDiv);
+                    questionNumber++;
+                });
+                
+                form.appendChild(moduleSection);
+            });
+            
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', updateProgress);
+            });
+        }
+
+        function updateProgress() {
+            let answered = 0;
+            const totalQuestions = 56;
+            for (let i = 0; i < totalQuestions; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) {
+                    answered++;
+                }
+            }
+            const percentage = (answered / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('questionCounter').textContent = `Domande completate: ${answered}/${totalQuestions}`;
+        }
+
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam();
+                    alert('⏰ Tempo scaduto! L\'esame è stato consegnato automaticamente.');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const timerValue = document.getElementById('timerValue');
+            const timer = document.getElementById('timer');
+            
+            timerValue.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            timer.classList.remove('warning', 'danger');
+            if (timeRemaining <= 300) {
+                timer.classList.add('danger');
+            } else if (timeRemaining <= 900) {
+                timer.classList.add('warning');
+            }
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval);
+            
+            const userName = document.getElementById('userName').value.trim() || 'Anonimo';
+            const userEmail = document.getElementById('userEmail').value.trim() || 'Non fornita';
+            
+            let score = 0;
+            let userAnswers = [];
+            
+            for (let i = 0; i < 56; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const correctAnswer = answers[i];
+                
+                if (selected) {
+                    userAnswers.push(`q${i + 1}=${selected.value}`);
+                    if (parseInt(selected.value) === correctAnswer) {
+                        score++;
+                        selected.parentElement.classList.add('correct');
+                    } else {
+                        selected.parentElement.classList.add('incorrect');
+                        document.getElementById(`q${i}_${correctAnswer}`).parentElement.classList.add('correct');
+                    }
+                } else {
+                    userAnswers.push(`q${i + 1}=non_risposta`);
+                    document.getElementById(`q${i}_${correctAnswer}`).parentElement.classList.add('correct');
+                }
+            }
+            
+            const totalQuestions = 56;
+            const percentage = Math.round((score / totalQuestions) * 100);
+            const passed = percentage >= 75;
+            const timeUsedSeconds = EXAM_DURATION - timeRemaining;
+            const timeUsedMinutes = Math.floor(timeUsedSeconds / 60);
+            
+            document.getElementById('score').textContent = `${score}/${totalQuestions}`;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            document.getElementById('timeUsed').textContent = `${timeUsedMinutes} min`;
+            document.getElementById('correctCount').textContent = `${score}`;
+            
+            const resultStatus = document.getElementById('resultStatus');
+            const resultMessage = document.getElementById('resultMessage');
+            
+            if (passed) {
+                resultStatus.textContent = '✅ SUPERATO';
+                resultStatus.className = 'result-status passed';
+                resultMessage.textContent = '🎉 COMPLIMENTI! Hai superato la simulazione DIFFICILE! Sei pronto per l\'esame reale!';
+            } else {
+                resultStatus.textContent = '❌ NON SUPERATO';
+                resultStatus.className = 'result-status failed';
+                resultMessage.textContent = `Hai ottenuto ${score}/56 (${percentage}%). La simulazione difficile richiede grande preparazione. Studia ancora!`;
+            }
+            
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').textContent = 'Esame Consegnato';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nome: userName,
+                    email: userEmail,
+                    test: 'Simulazione Esame EIPASS 7 Moduli - Versione 3 (DIFFICILE REALE)',
+                    punteggio: `${score}/${totalQuestions}`,
+                    percentuale: percentage,
+                    risposte: userAnswers.join(', '),
+                    tempo_impiegato: `${timeUsedMinutes} minuti`,
+                    esito: passed ? 'SUPERATO ✅' : 'NON SUPERATO ❌'
+                })
+            }).then(() => {
+                document.getElementById('successMessage').style.display = 'block';
+            }).catch(() => {
+                document.getElementById('successMessage').style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>
